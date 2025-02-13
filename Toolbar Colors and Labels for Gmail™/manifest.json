@@ -1,0 +1,16 @@
+{
+   "name": "Toolbar Colors and Labels for Gmail™",
+   "version": "1.2",
+   "manifest_version": 2,
+   "description": "Enhances your Gmail toolbar by adding colors and labels. A few other enhancements come with it as well!",
+   "content_scripts": [ {
+      "all_frames": true,
+      "css": [ "labels.css", "colors.css" ],
+      "matches": [ "http://mail.google.com/*", "https://mail.google.com/*" ]
+   } ],
+   "icons": {
+      "128": "images/extension/128.png",
+      "16": "images/extension/16.png",
+      "48": "images/extension/48.png"
+   }
+}

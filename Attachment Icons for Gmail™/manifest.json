@@ -1,0 +1,16 @@
+{
+	"manifest_version": 2,
+	"name": "Attachment Icons for Gmail™",
+	"description": "Replace the paper clip icon by the kind of attachment an email has in Gmail.",
+	"version": "1.2",
+	"content_scripts": [{
+		"matches": ["http://mail.google.com/*", "https://mail.google.com/*"],
+		"all_frames": true,
+		"css": ["icons.css"]
+	}],
+	"icons": {
+		"128": "images/extension/128.png",
+		"16": "images/extension/16.png",
+		"48": "images/extension/48.png"
+	}
+}

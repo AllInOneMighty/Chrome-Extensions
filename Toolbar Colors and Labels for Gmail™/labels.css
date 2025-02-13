@@ -1,0 +1,78 @@
+/* All buttons */
+.T-I {
+	line-height: 22px !important;
+	padding-top: 3px !important;
+	height: 23px !important;
+}
+
+/* All buttons */
+.asa {
+	width: 65px !important;
+	text-align: left !important;
+	color: #000 !important;
+}
+
+/* Settings */
+.ash {
+	width: 75px !important;
+	text-align: left !important;
+	color: #000 !important;
+}
+
+/* Inbox, Archive, Spam, Delete, Move to, Labels, Reload, Settings */
+.ar6,.ar8,.asl,.ar9,.ase,.asb,.asf,.aos {
+	text-indent: 22px !important;
+	width: 20px !important;
+}
+
+/* Settings */
+.aos {
+	margin-right: 48px;
+}
+
+/* Reply / Reply to all */
+.aaq img {
+	margin-right: 2px;
+}
+
+.ar6:before {
+	content:"Back";
+}
+.ar8:before {
+	content:"Archive";
+}
+.asl:before {
+	content:"Spam";
+}
+.ar9:before {
+	content:"Delete";
+}
+.ase:before {
+	content:"Move to";
+}
+.asb:before {
+	content:"Labels";
+}
+.asf:before {
+	content:"Reload";
+}
+.aos:before {
+	content:"Settings";
+}
+/* 'data-tooltip' not initialized unless user hovers element.
+Tried to select using image child class, but limited by CSS
+having no 'has child' selector. */
+div.aaq:after {
+	content:"Reply";
+}
+/*div[data-tooltip="Reply"].aaq:after {
+	content:"Reply";
+}
+div[data-tooltip="Reply to all"].aaq:after {
+	content:"Reply to all";
+}*/
+
+div[title="Back to Inbox"] div .ar6:before,
+div[data-tooltip="Back to Inbox"] div .ar6:before {
+	content:"Inbox";
+}
