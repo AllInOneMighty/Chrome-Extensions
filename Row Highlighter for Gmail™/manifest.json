@@ -1,24 +1,22 @@
 {
-   "background": {
-      "persistent": false,
-      "scripts": [ "jquery/jquery-3.2.1.min.js", "localStorage.js", "background.js" ]
-   },
-   "content_scripts": [ {
-      "all_frames": false,
-      "js": [ "engine.js" ],
-      "matches": [ "http://mail.google.com/*", "https://mail.google.com/*", "http://inbox.google.com/*", "https://inbox.google.com/*", "http://contacts.google.com/*", "https://contacts.google.com/*" ],
-      "run_at": "document_end"
-   } ],
-   "description": "Highlights Gmail and Inbox rows on mouse over with nice and shiny colors.",
-   "icons": {
-      "128": "images/extension/128.png",
-      "16": "images/extension/16.png",
-      "48": "images/extension/48.png"
-   },
-   "key": "MIGfMA0GCSqGSIb3DQEBAQUAA4GNADCBiQKBgQDMQzVDsjXXD4MN+6I0Cl4d5RLaiDcUCXK7IPidmjOKu3r+IG9XqLQC9ln5lbCvLqllxEcR+5zVbKWCOMK7EYb2A7hI0KQCTrLpV2jF8duE6w19IkOxguaIeo7lSB+hNNjwTcBTE2FDZLZzJARFsQRPwalZ/yyy3f48cA6JIOfJmwIDAQAB",
-   "manifest_version": 2,
-   "name": "Row Highlighter for Gmail™ and Inbox™",
-   "options_page": "options.html",
-   "update_url": "http://clients2.google.com/service/update2/crx",
-   "version": "1.4.0"
+  "name": "Row Highlighter for Gmail™",
+  "version": "1.4.0",
+  "manifest_version": 2,
+  "description": "Highlights Gmail rows on mouse over with nice and shiny colors.",
+  "background": {
+    "scripts": ["jquery/jquery-3.2.1.min.js", "localStorage.js", "background.js"],
+    "persistent": false
+  },
+  "content_scripts": [ {
+    "matches": [ "http://mail.google.com/*", "https://mail.google.com/*", "http://inbox.google.com/*", "https://inbox.google.com/*", "http://contacts.google.com/*", "https://contacts.google.com/*" ],
+    "all_frames": false,
+    "js": [ "engine.js" ],
+    "run_at": "document_end"
+  } ],
+  "icons": {
+    "128": "images/extension/128.png",
+    "16": "images/extension/16.png",
+    "48": "images/extension/48.png"
+  },
+  "options_page": "options.html"
 }
