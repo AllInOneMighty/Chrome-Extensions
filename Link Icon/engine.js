@@ -120,7 +120,7 @@ Opentip.defaultStyle = 'simpleDark';
 var last_valid_target = null;
 
 // Will be launched each time the mouse is moved
-var mousemoveFunction = function(event) {
+var mousemoveFunction = (event) => {
   var targetLink = findLink(event.target);
   if (targetLink == null) {
     return;
@@ -166,15 +166,16 @@ var mousemoveFunction = function(event) {
 };
 
 // Only listen to mousemove if mouse if over the document
-$(document).mouseenter(function(event) {
-  $(document).mousemove(mousemoveFunction);
-});
+document.addEventListener(
+    'mouseenter',
+    (event) => {document.addEventListener('mousemove', mousemoveFunction)});
+
 // Unbind mousemove if mouse has left the document
-$(document).mouseleave(function(event) {
-  $(document).unbind('mousemove', mousemoveFunction);
+document.addEventListener('mouseleave', (event) => {
+  document.removeEventListener('mousemove', mousemoveFunction);
 });
 
-chrome.runtime.onMessage.addListener(function(request, sender, sendResponse) {
+chrome.runtime.onMessage.addListener((request, sender, sendResponse) => {
   // If another tab is activated, hide the tooltip
   if (request == 'tabs.onActivated') {
     if (last_valid_target != null && last_valid_target.opentip != null &&
