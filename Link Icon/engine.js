@@ -17,17 +17,14 @@ var userSettings;
 
 // Retrieve user settings and start observing.
 chrome.storage.sync.get().then((value) => {
-  if (typeof(value) === "object") {
+  if (typeof (value) === 'object') {
     userSettings = value;
   } else {
     userSettings = {};
   }
 
-  observer.observe(document, {
-    attributes: true,
-    childList: false,
-    subtree: true
-  });
+  observer.observe(
+      document, {attributes: true, childList: false, subtree: true});
 });
 
 // Retrieves the HTML content of a link, based on the link DOM element
@@ -50,7 +47,8 @@ function getTooltipContents(link) {
 
   for (var index in iconsByPriority) {
     var icon = iconsByPriority[index];
-    if (icon.isEnabled(userSettings) && icon.matches(location, link, linkExtension)) {
+    if (icon.isEnabled(userSettings) &&
+        icon.matches(location, link, linkExtension)) {
       icon.updateLinkIcons(linkIcons);
     }
   }
@@ -68,7 +66,8 @@ function getTooltipContents(link) {
 
       if (linkIcons.hasIcon(icon.id)) {
         var span = document.createElement('span');
-        span.style.background = 'url("data:image/png;base64,' + icon.image.base64 + '")';
+        span.style.background =
+            'url("data:image/png;base64,' + icon.image.base64 + '")';
         span.style.display = 'inline-block';
         span.style.height = icon.image.height + 'px';
         span.style.width = icon.image.width + 'px';
@@ -98,10 +97,8 @@ function findLink(element) {
 Opentip.styles.simpleDark = {
   extends: 'dark',
   background: [
-    [0.0, 'rgba(25, 25, 25, 0.8)'],
-    [0.5, 'rgba(25, 25, 25, 0.85)'],
-    [0.5, 'rgba(10, 10, 10, 0.85)'],
-    [1.0, 'rgba(10, 10, 10, 0.9)']
+    [0.0, 'rgba(25, 25, 25, 0.8)'], [0.5, 'rgba(25, 25, 25, 0.85)'],
+    [0.5, 'rgba(10, 10, 10, 0.85)'], [1.0, 'rgba(10, 10, 10, 0.9)']
   ],
   borderColor: '#000',
   borderRadius: 3,
@@ -144,7 +141,8 @@ var mousemoveFunction = function(event) {
     var imgs = targetLink.getElementsByTagName('img');
     if (imgs.length > 0) {
       // Top of link - top of the img
-      var positionDiff = $(targetLink).position().top - $(imgs[0]).position().top;
+      var positionDiff =
+          $(targetLink).position().top - $(imgs[0]).position().top;
       // If position difference is more than 5 px, we consider the link
       // not at the same place
       if (positionDiff > 5) {
@@ -179,11 +177,9 @@ $(document).mouseleave(function(event) {
 chrome.runtime.onMessage.addListener(function(request, sender, sendResponse) {
   // If another tab is activated, hide the tooltip
   if (request == 'tabs.onActivated') {
-    if (last_valid_target != null
-        && last_valid_target.opentip != null
-        && last_valid_target.opentip != -1) {
+    if (last_valid_target != null && last_valid_target.opentip != null &&
+        last_valid_target.opentip != -1) {
       last_valid_target.opentip.hide();
     }
   }
 });
-
