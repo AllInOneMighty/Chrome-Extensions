@@ -1,9 +1,33 @@
+// Listen to link element changes and remove tooltips if it happens
+var observer = new MutationObserver(function(mutations, observer) {
+  mutations.forEach(function(mutation) {
+    // Only look at links
+    if (mutation.target.tagName == 'A') {
+      // If a link attribute has changed, remove opentip to generate a new one
+      if (mutation.target.opentip != null) {
+        mutation.target.opentip = null;
+      }
+    }
+  });
+});
+
+
 // User settings
 var userSettings;
 
-// Retrieve user settings ASAP
-chrome.extension.sendMessage('getUserSettings', function(response) {
-  userSettings = JSON.parse(response);
+// Retrieve user settings and start observing.
+chrome.storage.sync.get().then((value) => {
+  if (typeof(value) === "object") {
+    userSettings = value;
+  } else {
+    userSettings = {};
+  }
+
+  observer.observe(document, {
+    attributes: true,
+    childList: false,
+    subtree: true
+  });
 });
 
 // Retrieves the HTML content of a link, based on the link DOM element
@@ -41,7 +65,7 @@ function getTooltipContents(link) {
     // it to the resulting HTML
     for (var index in iconsByPriority) {
       var icon = iconsByPriority[index];
-      
+
       if (linkIcons.hasIcon(icon.id)) {
         var span = document.createElement('span');
         span.style.background = 'url("data:image/png;base64,' + icon.image.base64 + '")';
@@ -53,7 +77,7 @@ function getTooltipContents(link) {
       }
     }
   }
-  
+
   return html;
 }
 
@@ -163,20 +187,3 @@ chrome.runtime.onMessage.addListener(function(request, sender, sendResponse) {
   }
 });
 
-// Listen to link element changes and remove tooltips if it happens
-var observer = new MutationObserver(function(mutations, observer) {
-  mutations.forEach(function(mutation) {
-    // Only look at links
-    if (mutation.target.tagName == 'A') {
-      // If a link attribute has changed, remove opentip to generate a new one
-      if (mutation.target.opentip != null) {
-        mutation.target.opentip = null;
-      }
-    }
-  });
-});
-observer.observe(document, {
-  attributes: true,
-  childList: false,
-  subtree: true
-});
