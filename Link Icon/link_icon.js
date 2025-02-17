@@ -133,19 +133,22 @@ var LinkIcon = new function() {
     icons[icon.id] = icon;
     iconsByPriority = null;
     iconsByOrder = null;
-  } this.getIcon = function(iconId) {
+  };
+  this.getIcon = function(iconId) {
     return icons[iconId];
-  } this.getIconsByPriority = function() {
+  };
+  this.getIconsByPriority = function() {
     if (iconsByPriority == null) {
       iconsByPriority = sortIconsBy('priority');
     }
     return iconsByPriority;
-  } this.getIconsBySettingsOrder = function() {
+  };
+  this.getIconsBySettingsOrder = function() {
     if (iconsBySettingsOrder == null) {
       iconsBySettingsOrder = sortIconsBy('settingsOrder');
     }
     return iconsBySettingsOrder;
-  }
+  };
 };
 
 //
