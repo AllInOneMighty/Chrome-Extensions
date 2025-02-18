@@ -15,16 +15,9 @@
         "http://*/*",
         "https://*/*"
       ],
-      "css": [
-        "opentip/opentip.css",
-        "opentip/opentip-custom.css"
-      ],
+      "css": [],
       "js": [
-        "jquery-2.1.1.min.js",
-        "opentip/opentip-jquery.min.js",
-        "link_icon.js",
-        "tld.js",
-        "engine.js"
+        "link_icon.js"
       ],
       "run_at": "document_start",
       "all_frames": false

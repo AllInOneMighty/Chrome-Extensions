@@ -1,7 +1,0 @@
-.opentip-container {
-  z-index: 2000000000 !important;
-}
-
-.opentip-container.style-simple-dark .opentip {
-  padding: 4px 4px;
-}
