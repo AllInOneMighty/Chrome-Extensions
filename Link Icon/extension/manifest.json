@@ -17,7 +17,9 @@
       ],
       "css": [],
       "js": [
-        "link_icon.js"
+        "tld.js",
+        "link_icon.js",
+        "engine.js"
       ],
       "run_at": "document_start",
       "all_frames": false
