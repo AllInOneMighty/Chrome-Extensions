@@ -15,14 +15,16 @@ var tooltip;
         tooltipElement.style.left = tooltipNewLeft.toString() + 'px';
         tooltipElement.style.top = tooltipNewTop.toString() + 'px';
     }
-    function showTooltip(listenerElement, fillTooltipMethod) {
+    function showTooltip(anchorElement, fillTooltipMethod) {
         const tooltipElement = document.querySelector('#' + tooltip.TOOLTIP_ID);
-        tooltipElement.textContent = '';
-        if (!fillTooltipMethod(listenerElement, tooltipElement)) {
+        if (tooltipElement == null) {
             return;
         }
-        const listenerHtmlElement = listenerElement;
-        let listenerTraversalElement = listenerHtmlElement;
+        tooltipElement.textContent = '';
+        if (!fillTooltipMethod(anchorElement, tooltipElement)) {
+            return;
+        }
+        let listenerTraversalElement = anchorElement;
         let listenerElementOffsetLeft = 0;
         let listenerElementOffsetTop = 0;
         let isListenerElementFixedPosition = false;
@@ -45,7 +47,7 @@ var tooltip;
         const tooltipElementWidth = tooltipElement.offsetWidth;
         const viewHeight = document.documentElement.clientWidth;
         const viewWidth = document.documentElement.clientWidth;
-        const listenerElementHeight = listenerHtmlElement.offsetHeight;
+        const listenerElementHeight = anchorElement.offsetHeight;
         let tooltipElementOffsetLeft = listenerElementOffsetLeft;
         let tooltipElementOffsetTop = listenerElementOffsetTop + listenerElementHeight + TOOLTIP_DISTANCE;
         if (tooltipElementOffsetLeft + tooltipElementWidth >= viewWidth) {
@@ -68,16 +70,23 @@ var tooltip;
         }
     }
     tooltip.showTooltip = showTooltip;
-    function addTooltipEventListeners(listenerElement, fillTooltipMethod) {
-        listenerElement.addEventListener('mouseenter', (event) => {
-            showTooltip(listenerElement, fillTooltipMethod);
+    function hideTooltip() {
+        const tooltipElement = document.querySelector('#' + tooltip.TOOLTIP_ID);
+        if (tooltipElement == null) {
+            return;
+        }
+        tooltipElement.dataset[DATA_BASE_OFFSET_LEFT] = '';
+        tooltipElement.dataset[DATA_BASE_OFFSET_TOP] = '';
+        document.removeEventListener('scroll', moveTooltipOnScroll);
+        tooltipElement.style.display = 'none';
+    }
+    tooltip.hideTooltip = hideTooltip;
+    function addTooltipEventListeners(anchorElement, fillTooltipMethod) {
+        anchorElement.addEventListener('mouseenter', (_event) => {
+            showTooltip(anchorElement, fillTooltipMethod);
         });
-        listenerElement.addEventListener('mouseleave', (event) => {
-            const tooltipElement = document.querySelector('#' + tooltip.TOOLTIP_ID);
-            tooltipElement.dataset[DATA_BASE_OFFSET_LEFT] = '';
-            tooltipElement.dataset[DATA_BASE_OFFSET_TOP] = '';
-            document.removeEventListener('scroll', moveTooltipOnScroll);
-            tooltipElement.style.display = 'none';
+        anchorElement.addEventListener('mouseleave', (_event) => {
+            hideTooltip();
         });
     }
     tooltip.addTooltipEventListeners = addTooltipEventListeners;

@@ -23,31 +23,33 @@ namespace tooltip {
   }
 
   /**
-   * Immediately shows a tooltip on the given element using the filling method
+   * Immediately shows the tooltip on the given element using the filling method
    * to fill its contents.
    */
   export function showTooltip(
-      listenerElement: HTMLAnchorElement,
+      anchorElement: HTMLAnchorElement,
       fillTooltipMethod: (
-          listenerElement: HTMLAnchorElement,
+          anchorElement: HTMLAnchorElement,
           tooltipElement: HTMLElement,
           ) => boolean) {
     const tooltipElement =
         document.querySelector('#' + TOOLTIP_ID) as HTMLElement;
+    if (tooltipElement == null) {
+      // Tooltip not found, return early.
+      return;
+    }
 
     // Reset tooltip first
     tooltipElement.textContent = '';
     // Then fill it, or return if there was no content.
-    if (!fillTooltipMethod(listenerElement, tooltipElement)) {
+    if (!fillTooltipMethod(anchorElement, tooltipElement)) {
       return;
     }
-
-    const listenerHtmlElement = listenerElement as HTMLElement;
 
     // Calculate position of listener element. Using getBoundingClientRect()
     // is faster, but we need to traverse the element tree to determine if the
     // position is fixed anyway.
-    let listenerTraversalElement = listenerHtmlElement;
+    let listenerTraversalElement = anchorElement as HTMLElement;
     let listenerElementOffsetLeft = 0;
     let listenerElementOffsetTop = 0;
     let isListenerElementFixedPosition = false;
@@ -77,7 +79,7 @@ namespace tooltip {
     // Determine where to display the tooltip relative to viewport
     const viewHeight = document.documentElement.clientWidth;
     const viewWidth = document.documentElement.clientWidth;
-    const listenerElementHeight = listenerHtmlElement.offsetHeight;
+    const listenerElementHeight = anchorElement.offsetHeight;
     let tooltipElementOffsetLeft = listenerElementOffsetLeft;
     let tooltipElementOffsetTop =
         listenerElementOffsetTop + listenerElementHeight + TOOLTIP_DISTANCE;
@@ -112,29 +114,37 @@ namespace tooltip {
     }
   }
 
+  export function hideTooltip() {
+    const tooltipElement =
+        document.querySelector('#' + TOOLTIP_ID) as HTMLElement;
+    if (tooltipElement == null) {
+      // Tooltip not found, return early.
+      return;
+    }
+    // Don't really need to clean those datasets, but cleaner, so let's do it.
+    tooltipElement.dataset[DATA_BASE_OFFSET_LEFT] = '';
+    tooltipElement.dataset[DATA_BASE_OFFSET_TOP] = '';
+    document.removeEventListener('scroll', moveTooltipOnScroll);
+    tooltipElement.style.display = 'none';
+  }
+
   /**
    * Adds event listeners to display a tooltip when the mouse enters the given
    * anchor element, and hides it when the mouse leaves it and all of its
    * children.
    */
   export function addTooltipEventListeners(
-      listenerElement: HTMLAnchorElement,
+      anchorElement: HTMLAnchorElement,
       fillTooltipMethod: (
-          listenerElement: HTMLAnchorElement,
+          anchorElement: HTMLAnchorElement,
           tooltipElement: HTMLElement,
           ) => boolean,
   ) {
-    listenerElement.addEventListener('mouseenter', (event: Event) => {
-      showTooltip(listenerElement, fillTooltipMethod);
+    anchorElement.addEventListener('mouseenter', (_event: Event) => {
+      showTooltip(anchorElement, fillTooltipMethod);
     });
-    listenerElement.addEventListener('mouseleave', (event: Event) => {
-      const tooltipElement =
-          document.querySelector('#' + TOOLTIP_ID) as HTMLElement;
-      // Don't really need to clean those datasets, but cleaner, so let's do it.
-      tooltipElement.dataset[DATA_BASE_OFFSET_LEFT] = '';
-      tooltipElement.dataset[DATA_BASE_OFFSET_TOP] = '';
-      document.removeEventListener('scroll', moveTooltipOnScroll);
-      tooltipElement.style.display = 'none';
+    anchorElement.addEventListener('mouseleave', (_event: Event) => {
+      hideTooltip();
     });
   }
 

@@ -220,7 +220,7 @@ namespace link_icon {
   // LinkIcon: contains all icons with pre-calculated ordered icon arrays.
   export class LinkIcon {
     constructor() {
-      this.icons = buildIcons();
+      this.icons = buildIconsMap();
       this.iconsByPriority = sortIconsBy(this.icons.values(), (icon: Icon) => {
         return icon.priority;
       });
@@ -243,7 +243,7 @@ namespace link_icon {
     iconsMap.set(icon.id, icon);
   }
 
-  function buildIcons(): Map<IconId, Icon> {
+  function buildIconsMap(): Map<IconId, Icon> {
     const iconsMap = new Map<IconId, Icon>();
 
     // Target

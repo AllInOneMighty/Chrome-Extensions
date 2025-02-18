@@ -65,7 +65,7 @@ var link_icon;
     }
     class LinkIcon {
         constructor() {
-            this.icons = buildIcons();
+            this.icons = buildIconsMap();
             this.iconsByPriority = sortIconsBy(this.icons.values(), (icon) => {
                 return icon.priority;
             });
@@ -83,7 +83,7 @@ var link_icon;
     function addIconToIconsMap(icon, iconsMap) {
         iconsMap.set(icon.id, icon);
     }
-    function buildIcons() {
+    function buildIconsMap() {
         const iconsMap = new Map();
         addIconToIconsMap(new Icon("_blank", 'New tab/window', 'Opens a new tab or window depending on your browser settings.', 0, 0, 'iVBORw0KGgoAAAANSUhEUgAAABAAAAAQCAYAAAAf8/9hAAAAGXRFWHRTb2Z0d2FyZQBBZG9iZSBJbWFnZVJlYWR5ccllPAAAAK9JREFUeNpi/P//PwMlgImBQjDwBrCgC+xZbeIAZR4AYlAAMQIxWMwl9MwBYl2wX0lJu0FQUJABRIP4pHjhgKioWOP798/qDQ2tGEA0iA91EVEG/P/z53e9jo46AxOXLQOIBvGh3iHKAEYmpn+NV67cZPjyZg4DiAbxoWFBlAEOb99+rOfk/N148+ZbBhAN4sMCkmAsQIHjs2dfQH6uf/+eoQGX/8HOHU3KlBsAEGAAeklCrOestr4AAAAASUVORK5CYII=', (location, link, linkExtension) => {
             return link.target == '_blank';
