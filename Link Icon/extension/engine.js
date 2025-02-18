@@ -24,8 +24,7 @@ var engine;
     }
     engine.loadUserSettings = loadUserSettings;
     function getTooltipContents(link) {
-        var linkIcons = new link_icon.LinkIcons();
-        var location = document.location;
+        const iconsToShow = new Set();
         const url = new URL(link.href);
         var linkExtension = '';
         if (url.protocol == "http:" ||
@@ -34,19 +33,19 @@ var engine;
             url.protocol == "file:") {
             linkExtension = url.pathname.substring(url.pathname.lastIndexOf('.'));
         }
-        var iconsByPriority = linkIcon.getIconsByPriority();
+        var iconsByPriority = linkIcon.iconsByPriority;
         for (var index in iconsByPriority) {
             var icon = iconsByPriority[index];
             if (icon.isEnabled(userSettings) &&
-                icon.matches(location, link, linkExtension)) {
-                icon.updateLinkIcons(linkIcons);
+                icon.matches(document.location, link, linkExtension)) {
+                icon.addAndMaybeDeactivate(iconsToShow);
             }
         }
         var html = '';
-        if (!linkIcons.isEmpty()) {
+        if (iconsToShow.size != 0) {
             for (var index in iconsByPriority) {
                 var icon = iconsByPriority[index];
-                if (linkIcons.hasIcon(icon.id)) {
+                if (iconsToShow.has(icon.id)) {
                     var span = document.createElement('span');
                     span.style.background =
                         'url("data:image/png;base64,' + icon.imageBase64 + '")';

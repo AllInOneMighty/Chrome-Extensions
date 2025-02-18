@@ -1,11 +1,5 @@
 namespace link_icon {
-  // Because Chrome Extensions support for modules is absolute trash, we
-  // generate
-  // everything using "module": "None", which prevents from using import/export.
-  //
-  // Thus everything is in the global namespace.
-
-  const enum IconId {
+  export const enum IconId {
     _BLANK = '_blank',
     AIM = 'aim',
     APP = 'app',
@@ -150,32 +144,6 @@ namespace link_icon {
     ZIPX = '.zipx'
   }
 
-  // LinkIcons: icons to display for a given link
-  export class LinkIcons {
-    iconIds: Array<IconId> = [];
-
-    isEmpty() {
-      return this.iconIds.length == 0;
-    }
-
-    hasIcon(iconId: IconId) {
-      return this.iconIds.indexOf(iconId) >= 0;
-    }
-
-    addIcon(iconId: IconId) {
-      if (this.iconIds.indexOf(iconId) == -1) {
-        this.iconIds.push(iconId);
-      }
-    }
-
-    removeIcon(iconId: IconId) {
-      const i = this.iconIds.indexOf(iconId);
-      if (i >= 0) {
-        this.iconIds.splice(i, 1);
-      }
-    }
-  };
-
   // Icon: used in LinkIcon
   class Icon {
     constructor(
@@ -186,14 +154,14 @@ namespace link_icon {
             (location: Location, link: HTMLLinkElement,
              linkExtension: string) => boolean) {}
 
-    iconIdsToDeactivate?: Array<IconId>;
+    private iconIdsToDeactivate?: Array<IconId>;
 
     setIconIdsToDeactivate(iconIdsToDeactivate: Array<IconId>): Icon {
       this.iconIdsToDeactivate = iconIdsToDeactivate;
       return this;
     }
 
-    isEnabled(settings: Record<string, any>) {
+    isEnabled(settings: Record<string, any>): boolean {
       if (settings == undefined) {
         // No settings? We consider everything is enabled
         return true;
@@ -202,84 +170,76 @@ namespace link_icon {
       if (settings['icons.' + this.id + '.enabled'] == undefined) {
         return true;
       } else {
-        return settings['icons.' + this.id + '.enabled'] == '1' ? true : false;
+        return settings['icons.' + this.id + '.enabled'];
       }
     }
 
-    updateLinkIcons(linkIcons: LinkIcons) {
-      linkIcons.addIcon(this.id);
+    addAndMaybeDeactivate(iconsToShow: Set<IconId>) {
+      iconsToShow.add(this.id);
 
       if (this.iconIdsToDeactivate != undefined) {
         for (const index in this.iconIdsToDeactivate) {
-          linkIcons.removeIcon(this.iconIdsToDeactivate[index]);
+          iconsToShow.delete(this.iconIdsToDeactivate[index]);
         }
       }
     }
   };
 
-  // LinkIcon: main class
-  export class LinkIcon {
-    icons = buildIcons();
-    iconsByPriority?: Array<Icon>;
-    iconsBySettingsOrder?: Array<Icon>;
+  // Returns a new array where the given icons are ordered between each other
+  // using the given icon field retriever to compare them.
+  function sortIconsBy(
+      icons: MapIterator<Icon>,
+      fieldGetterFn: (icon: Icon) => Number): Array<Icon> {
+    const sorted: Array<Icon> = [];
 
-    // Orders the icons between each other using the given icon field name to
-    // compare the values. The field name should point to an integer.
-    sortIconsBy(fieldGetterFn: (icon: Icon) => Number): Array<Icon> {
-      const sorted: Array<Icon> = [];
+    for (const icon of icons) {
+      // If no element yet, add first one and loop immediately
+      if (sorted.length == 0) {
+        sorted.push(icon);
+        continue;
+      }
 
-      for (const iconId of this.icons.keys()) {
-        // Icon currently being added
-        const icon = this.icons.get(iconId)!;
-
-        // If no element yet, add first one and loop immediately
-        if (sorted.length == 0) {
-          sorted.push(icon);
-          continue;
-        }
-
-        for (var i = 0; i < sorted.length; i++) {
-          if (fieldGetterFn(sorted[i]) > fieldGetterFn(icon)) {
-            // Icon in the priority list has a greater priority than
-            // the icon we want to insert. So, insert it.
-            sorted.splice(i, 0, icon);
-            break;
-          }
-        }
-
-        if (sorted[i] != icon) {
-          // Not inserted in priority list, add it to the end
-          sorted.push(icon);
+      for (var i = 0; i < sorted.length; i++) {
+        if (fieldGetterFn(sorted[i]) > fieldGetterFn(icon)) {
+          // Icon in the priority list has a greater priority than
+          // the icon we want to insert. So, insert it.
+          sorted.splice(i, 0, icon);
+          break;
         }
       }
 
-      return sorted;
+      if (sorted[i] != icon) {
+        // Not inserted in priority list, add it to the end
+        sorted.push(icon);
+      }
     }
 
-    getIconsByPriority(): Array<Icon> {
-      if (this.iconsByPriority == undefined) {
-        this.iconsByPriority = this.sortIconsBy((icon: Icon) => {
-          return icon.priority;
-        });
-      }
-      return this.iconsByPriority;
-    };
+    return sorted;
+  }
 
-    getIconsBySettingsOrder(): Array<Icon> {
-      if (this.iconsBySettingsOrder == undefined) {
-        this.iconsBySettingsOrder = this.sortIconsBy((icon: Icon) => {
-          return icon.settingsOrder;
-        });
-      }
-      return this.iconsBySettingsOrder;
-    };
+  // LinkIcon: contains all icons with pre-calculated ordered icon arrays.
+  export class LinkIcon {
+    constructor() {
+      this.icons = buildIcons();
+      this.iconsByPriority = sortIconsBy(this.icons.values(), (icon: Icon) => {
+        return icon.priority;
+      });
+      this.iconsBySettingsOrder =
+          sortIconsBy(this.icons.values(), (icon: Icon) => {
+            return icon.settingsOrder;
+          });
+    }
+
+    readonly iconsByPriority: Array<Icon>;
+    readonly iconsBySettingsOrder: Array<Icon>;
+    private readonly icons: Map<IconId, Icon>;
   };
 
   //
   // Classes declaration finished, now on to the code
   //
 
-  function addIcon(icon: Icon, iconsMap: Map<IconId, Icon>) {
+  function addIconToIconsMap(icon: Icon, iconsMap: Map<IconId, Icon>) {
     iconsMap.set(icon.id, icon);
   }
 
@@ -287,7 +247,7 @@ namespace link_icon {
     const iconsMap = new Map<IconId, Icon>();
 
     // Target
-    addIcon(
+    addIconToIconsMap(
         new Icon(
             IconId._BLANK, 'New tab/window',
             'Opens a new tab or window depending on your browser settings.',
@@ -301,7 +261,7 @@ namespace link_icon {
 
 
     // Protocols
-    addIcon(
+    addIconToIconsMap(
         new Icon(
             IconId.AIM, 'AIM',
             'An AIM resource (new chat window, new buddy, ...).',
@@ -314,7 +274,7 @@ namespace link_icon {
             })
             .setIconIdsToDeactivate([IconId.EXTERNAL]),
         iconsMap);
-    addIcon(
+    addIconToIconsMap(
         new Icon(
             IconId.FTP, 'FTP', 'A resource on a FTP server.',
             /*priority=*/ 10, /*settingsOrder=*/ 13, /*imageBase64=*/
@@ -326,7 +286,7 @@ namespace link_icon {
             })
             .setIconIdsToDeactivate([IconId.EXTERNAL]),
         iconsMap);
-    addIcon(
+    addIconToIconsMap(
         new Icon(
             IconId.IRC, 'IRC', 'An IRC server (and channel).',
             /*priority=*/ 10, /*settingsOrder=*/ 11, /*imageBase64=*/
@@ -338,7 +298,7 @@ namespace link_icon {
             })
             .setIconIdsToDeactivate([IconId.EXTERNAL]),
         iconsMap);
-    addIcon(
+    addIconToIconsMap(
         new Icon(
             IconId.LOCAL, 'Local file',
             'A file located on the local host (your machine).',
@@ -351,7 +311,7 @@ namespace link_icon {
             })
             .setIconIdsToDeactivate([IconId.EXTERNAL]),
         iconsMap);
-    addIcon(
+    addIconToIconsMap(
         new Icon(
             IconId.MAIL, 'Mail',
             'Creates a new message in your mail client and opens it.',
@@ -364,7 +324,7 @@ namespace link_icon {
             })
             .setIconIdsToDeactivate([IconId.EXTERNAL]),
         iconsMap);
-    addIcon(
+    addIconToIconsMap(
         new Icon(
             IconId.MAGNET, 'Magnet', 'A magnet link.',
             /*priority=*/ 10, /*settingsOrder=*/ 15, /*imageBase64=*/
@@ -376,7 +336,7 @@ namespace link_icon {
             })
             .setIconIdsToDeactivate([IconId.EXTERNAL]),
         iconsMap);
-    addIcon(
+    addIconToIconsMap(
         new Icon(
             IconId.SCRIPT, 'Script',
             'Will trigger a javascript action when you click.',
@@ -392,7 +352,7 @@ namespace link_icon {
         iconsMap);
 
     // Hosts
-    addIcon(
+    addIconToIconsMap(
         new Icon(
             IconId.GMAIL, 'Gmail', 'Redirects to Google Mail.',
             /*priority=*/ 10, /*settingsOrder=*/ 40, /*imageBase64=*/
@@ -411,7 +371,7 @@ namespace link_icon {
         iconsMap);
 
     // File types
-    addIcon(
+    addIconToIconsMap(
         new Icon(
             IconId.APP, 'Application',
             'An application file (app, bat, exe, ...).',
@@ -426,7 +386,7 @@ namespace link_icon {
                   linkExtension == FileExtension.PIF;
             }),
         iconsMap);
-    addIcon(
+    addIconToIconsMap(
         new Icon(
             IconId.ARCHIVE, 'Archive',
             'A compressed file or an archive (7z, rar, zip, ...).',
@@ -446,7 +406,7 @@ namespace link_icon {
                   linkExtension == FileExtension.ZIPX;
             }),
         iconsMap);
-    addIcon(
+    addIconToIconsMap(
         new Icon(
             IconId.DOCUMENT, 'Document',
             'A rich-text document (doc, rtf, ...).',
@@ -461,7 +421,7 @@ namespace link_icon {
                   linkExtension == FileExtension.WPS;
             }),
         iconsMap);
-    addIcon(
+    addIconToIconsMap(
         new Icon(
             IconId.EXTENSION, 'Google Chrome Extension',
             'This will install a new linkExtension on your browser!',
@@ -472,7 +432,7 @@ namespace link_icon {
               return linkExtension == FileExtension.CRX;
             }),
         iconsMap);
-    addIcon(
+    addIconToIconsMap(
         new Icon(
             IconId.IMAGE, 'Image',
             'You should see an image by clicking on this link.',
@@ -489,7 +449,7 @@ namespace link_icon {
                   linkExtension == FileExtension.TIF;
             }),
         iconsMap);
-    addIcon(
+    addIconToIconsMap(
         new Icon(
             IconId.PSD, 'Photoshop Image',
             'A Photoshop image. You will need a special software to open these.',
@@ -500,7 +460,7 @@ namespace link_icon {
               return linkExtension == FileExtension.PSD;
             }),
         iconsMap);
-    addIcon(
+    addIconToIconsMap(
         new Icon(
             IconId.JAVA, 'Java Source File',
             'You should see an image by clicking on this link.',
@@ -511,7 +471,7 @@ namespace link_icon {
               return linkExtension == FileExtension.JAVA;
             }),
         iconsMap);
-    addIcon(
+    addIconToIconsMap(
         new Icon(
             IconId.JAVAWS, 'Java Applet/Archive',
             'A Java Web Start applet or a Java archive (may be an application).',
@@ -523,7 +483,7 @@ namespace link_icon {
                   linkExtension == FileExtension.JNLP;
             }),
         iconsMap);
-    addIcon(
+    addIconToIconsMap(
         new Icon(
             IconId.JAVASCRIPT, 'Javascript File', 'A Javascript source file.',
             /*priority=*/ 0, /*settingsOrder=*/ 54, /*imageBase64=*/
@@ -533,7 +493,7 @@ namespace link_icon {
               return linkExtension == FileExtension.JS;
             }),
         iconsMap);
-    addIcon(
+    addIconToIconsMap(
         new Icon(
             IconId.JSON, 'JSON Stream', 'A stream using the JSON format.',
             /*priority=*/ 0, /*settingsOrder=*/ 54, /*imageBase64=*/
@@ -543,7 +503,7 @@ namespace link_icon {
               return linkExtension == FileExtension.JSON;
             }),
         iconsMap);
-    addIcon(
+    addIconToIconsMap(
         new Icon(
             IconId.CSS, 'CSS File', 'A CSS source file.',
             /*priority=*/ 0, /*settingsOrder=*/ 54, /*imageBase64=*/
@@ -553,7 +513,7 @@ namespace link_icon {
               return linkExtension == FileExtension.CSS;
             }),
         iconsMap);
-    addIcon(
+    addIconToIconsMap(
         new Icon(
             IconId.MUSIC, 'Music', 'A mucic file (mp3, ogg, wav, ...).',
             /*priority=*/ 0, /*settingsOrder=*/ 51, /*imageBase64=*/
@@ -580,7 +540,7 @@ namespace link_icon {
                   linkExtension == FileExtension.WMA;
             }),
         iconsMap);
-    addIcon(
+    addIconToIconsMap(
         new Icon(
             IconId.PDF, 'PDF',
             'Will open your PDF reader application and open the document.',
@@ -591,7 +551,7 @@ namespace link_icon {
               return linkExtension == FileExtension.PDF;
             }),
         iconsMap);
-    addIcon(
+    addIconToIconsMap(
         new Icon(
             IconId.EPUB, 'ePUB', 'e-book file using the ePUB standard format.',
             /*priority=*/ 0, /*settingsOrder=*/ 56, /*imageBase64=*/
@@ -601,7 +561,7 @@ namespace link_icon {
               return linkExtension == FileExtension.EPUB;
             }),
         iconsMap);
-    addIcon(
+    addIconToIconsMap(
         new Icon(
             IconId.PRESENTATION, 'Presentation',
             'A file used for presentations (ppt, ...).',
@@ -613,7 +573,7 @@ namespace link_icon {
                   linkExtension == FileExtension.PPTX;
             }),
         iconsMap);
-    addIcon(
+    addIconToIconsMap(
         new Icon(
             IconId.QUICKTIME, 'Quicktime media',
             'A file readable with Apple Quicktime (c).',
@@ -625,7 +585,7 @@ namespace link_icon {
                   linkExtension == FileExtension.QT;
             }),
         iconsMap);
-    addIcon(
+    addIconToIconsMap(
         new Icon(
             IconId.REAL, 'Real media', 'A file readable with RealPlayer (c).',
             /*priority=*/ 0, /*settingsOrder=*/ 58, /*imageBase64=*/
@@ -636,7 +596,7 @@ namespace link_icon {
                   linkExtension == FileExtension.RMVB;
             }),
         iconsMap);
-    addIcon(
+    addIconToIconsMap(
         new Icon(
             IconId.REGISTRY, 'Registry',
             'A registry file (be careful with those files!).',
@@ -647,7 +607,7 @@ namespace link_icon {
               return linkExtension == FileExtension.REG;
             }),
         iconsMap);
-    addIcon(
+    addIconToIconsMap(
         new Icon(
             IconId.SPREADSHEET, 'Spreadsheet', 'A spreadsheet (xls, ...).',
             /*priority=*/ 0, /*settingsOrder=*/ 62, /*imageBase64=*/
@@ -658,7 +618,7 @@ namespace link_icon {
                   linkExtension == FileExtension.XLSX;
             }),
         iconsMap);
-    addIcon(
+    addIconToIconsMap(
         new Icon(
             IconId.TORRENT, 'Torrent', 'A spreadsheet (xls, ...).',
             /*priority=*/ 0, /*settingsOrder=*/ 60, /*imageBase64=*/
@@ -668,7 +628,7 @@ namespace link_icon {
               return linkExtension == FileExtension.TORRENT;
             }),
         iconsMap);
-    addIcon(
+    addIconToIconsMap(
         new Icon(
             IconId.TEXT, 'Text files', 'A raw text file (log, txt, ...).',
             /*priority=*/ 0, /*settingsOrder=*/ 61, /*imageBase64=*/
@@ -679,7 +639,7 @@ namespace link_icon {
                   linkExtension == FileExtension.TXT;
             }),
         iconsMap);
-    addIcon(
+    addIconToIconsMap(
         new Icon(
             IconId.USER_SCRIPT, 'User script', 'A user script.',
             /*priority=*/ 5, /*settingsOrder=*/ 68, /*imageBase64=*/
@@ -694,7 +654,7 @@ namespace link_icon {
             })
             .setIconIdsToDeactivate([IconId.JAVASCRIPT]),
         iconsMap);
-    addIcon(
+    addIconToIconsMap(
         new Icon(
             IconId.VIDEO, 'Video', 'A video file (avi, divx, mpg, ogm, ...).',
             /*priority=*/ 0, /*settingsOrder=*/ 65, /*imageBase64=*/
@@ -729,7 +689,7 @@ namespace link_icon {
         iconsMap);
 
     // Security
-    addIcon(
+    addIconToIconsMap(
         new Icon(
             IconId.SECURE, 'Secure connection',
             'A SSL secured connection will be opened by clicking on this link (only displayed on non secured pages).',
@@ -751,7 +711,7 @@ namespace link_icon {
               return false;
             }),
         iconsMap);
-    addIcon(
+    addIconToIconsMap(
         new Icon(
             IconId.INSECURE, 'Insecure connection',
             'You will return to a non secured connection by clicking on this link (only displayed on secured pages).',
@@ -775,7 +735,7 @@ namespace link_icon {
         iconsMap);
 
     // External
-    addIcon(
+    addIconToIconsMap(
         new Icon(
             IconId.EXTERNAL, 'External link',
             'You will reach an external domain by clicking on this link. Note that switching country on the same site does not trigger this icon (for example switching from "ebay.com" to "ebay.co.jp").',

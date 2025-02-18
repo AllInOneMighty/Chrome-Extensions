@@ -35,11 +35,8 @@ namespace engine {
 
   // Retrieves the HTML content of a link, based on the link DOM element
   function getTooltipContents(link: HTMLLinkElement) {
-    // To calculate type of link
-    var linkIcons = new link_icon.LinkIcons();
+    const iconsToShow = new Set<link_icon.IconId>();
 
-    // Getting required information to call Icon.matches()
-    var location = document.location;
     // Compute link extension here to do it only once per link
     // and not once per icon and per link
     const url = new URL(link.href);
@@ -52,20 +49,20 @@ namespace engine {
     }
 
     // Determinate all icons to display
-    var iconsByPriority = linkIcon.getIconsByPriority();
+    var iconsByPriority = linkIcon.iconsByPriority;
 
     for (var index in iconsByPriority) {
       var icon = iconsByPriority[index];
       if (icon.isEnabled(userSettings) &&
-          icon.matches(location, link, linkExtension)) {
-        icon.updateLinkIcons(linkIcons);
+          icon.matches(document.location, link, linkExtension)) {
+        icon.addAndMaybeDeactivate(iconsToShow);
       }
     }
 
     // Compute HTML to insert in tooltip
     var html = '';
 
-    if (!linkIcons.isEmpty()) {
+    if (iconsToShow.size != 0) {
       // At least one icon to display
       // Iterate over ordered list of icon and for each
       // one we can find into the LinkIcons object, add
@@ -73,7 +70,7 @@ namespace engine {
       for (var index in iconsByPriority) {
         var icon = iconsByPriority[index];
 
-        if (linkIcons.hasIcon(icon.id)) {
+        if (iconsToShow.has(icon.id)) {
           var span = document.createElement('span');
           span.style.background =
               'url("data:image/png;base64,' + icon.imageBase64 + '")';
