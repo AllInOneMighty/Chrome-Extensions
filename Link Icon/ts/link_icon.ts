@@ -2359,7 +2359,7 @@ function getTooltipContents(link: HTMLLinkElement) {
       if (linkIcons.hasIcon(icon.id)) {
         var span = document.createElement('span');
         span.style.background =
-            'url("data:image/png;base64,' + icon.image.base64 + '")';
+            'url("data:image/png;base64,' + icon.imageBase64 + '")';
         span.style.display = 'inline-block';
         span.style.height = '16px';
         span.style.width = '16px';
