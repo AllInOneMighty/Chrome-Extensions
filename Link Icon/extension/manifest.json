@@ -15,8 +15,9 @@
         "http://*/*",
         "https://*/*"
       ],
-      "css": [],
+      "css": ["tooltip.css"],
       "js": [
+        "tooltip.js",
         "tld.js",
         "link_icon.js",
         "engine.js"

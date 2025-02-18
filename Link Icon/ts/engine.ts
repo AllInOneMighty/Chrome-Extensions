@@ -33,8 +33,10 @@ namespace engine {
         document, {attributes: true, childList: false, subtree: true});
   }
 
-  // Retrieves the HTML content of a link, based on the link DOM element
-  function getTooltipContents(link: HTMLLinkElement) {
+  // Fills the given tooltip contents or returns `false` if nothing was to be
+  // filled.
+  function maybeFillTooltipContents(
+      link: HTMLAnchorElement, tooltipElement: HTMLElement): boolean {
     const iconsToShow = new Set<link_icon.IconId>();
 
     // Compute link extension here to do it only once per link
@@ -59,8 +61,13 @@ namespace engine {
       }
     }
 
+    if (iconsToShow.size == 0) {
+      return false;
+    }
+
     // Compute HTML to insert in tooltip
     var html = '';
+
 
     if (iconsToShow.size != 0) {
       // At least one icon to display
@@ -83,47 +90,23 @@ namespace engine {
       }
     }
 
-    return html;
+    tooltipElement.innerHTML = html;
+
+    return true;
   }
 
   // Recursively matches the first link with the given element or one of its
   // parents.
-  function findLink(target: EventTarget|Node|null): HTMLLinkElement|undefined {
-    if (target == null || !(target instanceof HTMLElement)) {
+  function findLink(target: EventTarget|Node|null): HTMLAnchorElement
+      |undefined {
+    if (target == null || !(target instanceof Node)) {
       return undefined;
     }
-    if (target instanceof HTMLLinkElement) {
+    if (target instanceof HTMLAnchorElement) {
       return target;
     }
     return findLink(target.parentNode);
   }
-
-  // Adds a custom style, also using classes
-  // defined in opentip/opentip-custom.css
-  // Opentip.styles.simpleDark = {
-  //   extends: 'dark',
-  //   background: [
-  //     [0.0, 'rgba(25, 25, 25, 0.8)'], [0.5, 'rgba(25, 25, 25, 0.85)'],
-  //     [0.5, 'rgba(10, 10, 10, 0.85)'], [1.0, 'rgba(10, 10, 10, 0.9)']
-  //   ],
-  //   borderColor: '#000',
-  //   borderRadius: 3,
-  //   borderWidth: 2,
-  //   className: 'simple-dark',
-  //   delay: 0,
-  //   group: 'link_icon',
-  //   hideEffectDuration: 0.075,
-  //   shadowBlur: 3,
-  //   showEffectDuration: 0.075,
-  //   stem: true,
-  //   tipJoint: 'right'
-  // };
-
-  // Configures the default style of all tooltips
-  // Opentip.defaultStyle = 'simpleDark';
-
-  // Last target where a tooltip was shown
-  var last_valid_target: HTMLLinkElement|undefined = undefined;
 
   // Will be launched each time the mouse is moved
   export var mousemoveFunction = (event: MouseEvent) => {
@@ -132,46 +115,24 @@ namespace engine {
       return;
     }
 
-    // if (targetLink.opentip != null) {
-    //   last_valid_target = targetLink;
-    //   // Tooltip will already be handled by the link
-    //   return;
-    // }
-
-    // Generate the html and attach the tooltip to the link
-
-    var html = getTooltipContents(targetLink);
-    if (html != '') {
-      var offsetY = 0;
-      // Fix links being smaller than images they include
-      var imgs = targetLink.getElementsByTagName('img');
-      if (imgs.length > 0) {
-        // // Top of link - top of the img
-        // var positionDiff =
-        //     $(targetLink).position().top - $(imgs[0]).position().top;
-        // // If position difference is more than 5 px, we consider the link
-        // // not at the same place
-        // if (positionDiff > 5) {
-        //   offsetY = positionDiff / 2;
-        // }
-      }
-
-      // targetLink.opentip = new Opentip($(targetLink), {
-      //   offset: [0, -offsetY],
-      //   target: targetLink,
-      // });
-      // targetLink.opentip.setContent(html);
-      // targetLink.opentip.show();
-
-      // Save last valid target
-      last_valid_target = targetLink;
-    } else {
-      // No tooltip for this link
-      // targetLink.opentip = -1;
+    if (!(tooltip.TOOLTIP_ID in targetLink.dataset)) {
+      targetLink.dataset[tooltip.TOOLTIP_ID] = '1';
+      tooltip.addTooltip(
+          targetLink,
+          (listenerElement: Element, tooltipElement: HTMLElement) => {
+            return maybeFillTooltipContents(targetLink!, tooltipElement);
+          });
     }
   };
 
 }  // namespace engine
+
+// Create tooltip when DOM is loaded.
+document.addEventListener('DOMContentLoaded', (ev: Event) => {
+  const tooltipElement = document.createElement('div');
+  tooltipElement.id = tooltip.TOOLTIP_ID;
+  document.body.appendChild(tooltipElement);
+});
 
 // Retrieve user settings, start observing, react to mouse movements and tab
 // changes.

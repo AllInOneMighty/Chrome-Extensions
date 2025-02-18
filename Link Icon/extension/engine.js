@@ -26,7 +26,7 @@ var engine;
         observer.observe(document, { attributes: true, childList: false, subtree: true });
     }
     engine.observe = observe;
-    function getTooltipContents(link) {
+    function maybeFillTooltipContents(link, tooltipElement) {
         const iconsToShow = new Set();
         const url = new URL(link.href);
         var linkExtension = '';
@@ -44,6 +44,9 @@ var engine;
                 icon.addAndMaybeDeactivate(iconsToShow);
             }
         }
+        if (iconsToShow.size == 0) {
+            return false;
+        }
         var html = '';
         if (iconsToShow.size != 0) {
             for (var index in iconsByPriority) {
@@ -59,35 +62,36 @@ var engine;
                 }
             }
         }
-        return html;
+        tooltipElement.innerHTML = html;
+        return true;
     }
     function findLink(target) {
-        if (target == null || !(target instanceof HTMLElement)) {
+        if (target == null || !(target instanceof Node)) {
             return undefined;
         }
-        if (target instanceof HTMLLinkElement) {
+        if (target instanceof HTMLAnchorElement) {
             return target;
         }
         return findLink(target.parentNode);
     }
-    var last_valid_target = undefined;
     engine.mousemoveFunction = (event) => {
         var targetLink = findLink(event.target);
         if (targetLink == null) {
             return;
         }
-        var html = getTooltipContents(targetLink);
-        if (html != '') {
-            var offsetY = 0;
-            var imgs = targetLink.getElementsByTagName('img');
-            if (imgs.length > 0) {
-            }
-            last_valid_target = targetLink;
-        }
-        else {
+        if (!(tooltip.TOOLTIP_ID in targetLink.dataset)) {
+            targetLink.dataset[tooltip.TOOLTIP_ID] = '1';
+            tooltip.addTooltip(targetLink, (listenerElement, tooltipElement) => {
+                return maybeFillTooltipContents(targetLink, tooltipElement);
+            });
         }
     };
 })(engine || (engine = {}));
+document.addEventListener('DOMContentLoaded', (ev) => {
+    const tooltipElement = document.createElement('div');
+    tooltipElement.id = tooltip.TOOLTIP_ID;
+    document.body.appendChild(tooltipElement);
+});
 chrome.storage.sync.get().then((value) => {
     engine.loadUserSettings(value);
     engine.observe();

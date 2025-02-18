@@ -1,0 +1,18 @@
+#e01n2KonBeR9ayn1 {
+    align-items: center;
+    background-color: #333;
+    background-image: none;
+    border-color: gold;
+    border-style: solid;
+    border-radius: 3px;
+    border-width: 1px;
+    box-shadow: 0 0 5px #aaa;
+    color: #eee;
+    /* By default, the tooltip is invisible. */
+    display: none;
+    font-family: sans-serif;
+    justify-items: left;
+    padding: 5px 5px;
+    position: absolute;
+    z-index: 999;
+  }
