@@ -38,7 +38,7 @@ var engine;
         }
         var iconsByPriority = linkIcon.iconsByPriority;
         for (var index in iconsByPriority) {
-            var icon = iconsByPriority[index];
+            const icon = iconsByPriority[index];
             if (icon.isEnabled(userSettings) &&
                 icon.matches(document.location, link, linkExtension)) {
                 icon.addAndMaybeDeactivate(iconsToShow);
@@ -47,22 +47,20 @@ var engine;
         if (iconsToShow.size == 0) {
             return false;
         }
-        var html = '';
         if (iconsToShow.size != 0) {
             for (var index in iconsByPriority) {
-                var icon = iconsByPriority[index];
+                const icon = iconsByPriority[index];
                 if (iconsToShow.has(icon.id)) {
-                    var span = document.createElement('span');
+                    const span = document.createElement('span');
                     span.style.background =
                         'url("data:image/png;base64,' + icon.imageBase64 + '")';
                     span.style.display = 'inline-block';
                     span.style.height = '16px';
                     span.style.width = '16px';
-                    html += span.outerHTML;
+                    tooltipElement.appendChild(span);
                 }
             }
         }
-        tooltipElement.innerHTML = html;
         return true;
     }
     function findLink(target) {

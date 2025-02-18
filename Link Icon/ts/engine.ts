@@ -54,7 +54,7 @@ namespace engine {
     var iconsByPriority = linkIcon.iconsByPriority;
 
     for (var index in iconsByPriority) {
-      var icon = iconsByPriority[index];
+      const icon = iconsByPriority[index];
       if (icon.isEnabled(userSettings) &&
           icon.matches(document.location, link, linkExtension)) {
         icon.addAndMaybeDeactivate(iconsToShow);
@@ -65,32 +65,25 @@ namespace engine {
       return false;
     }
 
-    // Compute HTML to insert in tooltip
-    var html = '';
-
-
     if (iconsToShow.size != 0) {
       // At least one icon to display
       // Iterate over ordered list of icon and for each
       // one we can find into the LinkIcons object, add
       // it to the resulting HTML
       for (var index in iconsByPriority) {
-        var icon = iconsByPriority[index];
+        const icon = iconsByPriority[index];
 
         if (iconsToShow.has(icon.id)) {
-          var span = document.createElement('span');
+          const span = document.createElement('span');
           span.style.background =
               'url("data:image/png;base64,' + icon.imageBase64 + '")';
           span.style.display = 'inline-block';
           span.style.height = '16px';
           span.style.width = '16px';
-
-          html += span.outerHTML;
+          tooltipElement.appendChild(span);
         }
       }
     }
-
-    tooltipElement.innerHTML = html;
 
     return true;
   }
