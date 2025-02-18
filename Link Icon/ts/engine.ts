@@ -110,11 +110,12 @@ namespace engine {
 
     if (!(tooltip.TOOLTIP_ID in targetLink.dataset)) {
       targetLink.dataset[tooltip.TOOLTIP_ID] = '1';
-      tooltip.addTooltip(
+      tooltip.addTooltipEventListeners(
           targetLink,
           (listenerElement: Element, tooltipElement: HTMLElement) => {
             return maybeFillTooltipContents(targetLink!, tooltipElement);
           });
+      tooltip.showTooltip(targetLink, maybeFillTooltipContents);
     }
   };
 

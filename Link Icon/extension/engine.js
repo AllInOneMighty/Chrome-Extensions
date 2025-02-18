@@ -79,9 +79,10 @@ var engine;
         }
         if (!(tooltip.TOOLTIP_ID in targetLink.dataset)) {
             targetLink.dataset[tooltip.TOOLTIP_ID] = '1';
-            tooltip.addTooltip(targetLink, (listenerElement, tooltipElement) => {
+            tooltip.addTooltipEventListeners(targetLink, (listenerElement, tooltipElement) => {
                 return maybeFillTooltipContents(targetLink, tooltipElement);
             });
+            tooltip.showTooltip(targetLink, maybeFillTooltipContents);
         }
     };
 })(engine || (engine = {}));
