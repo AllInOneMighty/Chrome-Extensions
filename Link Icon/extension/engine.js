@@ -73,7 +73,7 @@ var engine;
         return findLink(target.parentNode);
     }
     engine.mousemoveFunction = (event) => {
-        var targetLink = findLink(event.target);
+        const targetLink = findLink(event.target);
         if (targetLink == null) {
             return;
         }

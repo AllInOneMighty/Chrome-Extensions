@@ -37,7 +37,7 @@ namespace tooltip {
 
     // Reset tooltip first
     tooltipElement.textContent = '';
-    // Then fill it
+    // Then fill it, or return if there was no content.
     if (!fillTooltipMethod(listenerElement, tooltipElement)) {
       return;
     }

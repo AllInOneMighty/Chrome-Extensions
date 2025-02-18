@@ -101,14 +101,16 @@ namespace engine {
     return findLink(target.parentNode);
   }
 
-  // Will be launched each time the mouse is moved
+  // Will be run each time the mouse is moved
   export var mousemoveFunction = (event: MouseEvent) => {
-    var targetLink = findLink(event.target);
+    const targetLink = findLink(event.target);
     if (targetLink == null) {
       return;
     }
 
     if (!(tooltip.TOOLTIP_ID in targetLink.dataset)) {
+      // Save that event listeners have been added to not re-add them every
+      // time.
       targetLink.dataset[tooltip.TOOLTIP_ID] = '1';
       tooltip.addTooltipEventListeners(
           targetLink,
