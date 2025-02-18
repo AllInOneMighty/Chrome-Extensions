@@ -2,16 +2,6 @@
 var engine;
 (function (engine) {
     const linkIcon = new link_icon.LinkIcon();
-    var observer = new MutationObserver(function (mutations, observer) {
-        mutations.forEach(function (mutation) {
-            if (!(mutation.target instanceof Element)) {
-                return;
-            }
-            const target = mutation.target;
-            if (target.tagName == 'A') {
-            }
-        });
-    });
     var userSettings;
     function loadUserSettings(value) {
         if (typeof (value) === 'object') {
@@ -20,9 +10,22 @@ var engine;
         else {
             userSettings = {};
         }
-        observer.observe(document, { attributes: true, childList: false, subtree: true });
     }
     engine.loadUserSettings = loadUserSettings;
+    function observe() {
+        const observer = new MutationObserver(function (mutations, observer) {
+            mutations.forEach(function (mutation) {
+                if (!(mutation.target instanceof Element)) {
+                    return;
+                }
+                const target = mutation.target;
+                if (target.tagName == 'A') {
+                }
+            });
+        });
+        observer.observe(document, { attributes: true, childList: false, subtree: true });
+    }
+    engine.observe = observe;
     function getTooltipContents(link) {
         const iconsToShow = new Set();
         const url = new URL(link.href);
@@ -85,14 +88,17 @@ var engine;
         }
     };
 })(engine || (engine = {}));
-document.addEventListener('mouseenter', (event) => {
-    document.addEventListener('mousemove', engine.mousemoveFunction);
+chrome.storage.sync.get().then((value) => {
+    engine.loadUserSettings(value);
+    engine.observe();
+    chrome.runtime.onMessage.addListener((message, sender, sendResponse) => {
+        if (message == 'tabs.onActivated') {
+        }
+    });
+    document.addEventListener('mouseenter', (event) => {
+        document.addEventListener('mousemove', engine.mousemoveFunction);
+    });
+    document.addEventListener('mouseleave', (event) => {
+        document.removeEventListener('mousemove', engine.mousemoveFunction);
+    });
 });
-document.addEventListener('mouseleave', (event) => {
-    document.removeEventListener('mousemove', engine.mousemoveFunction);
-});
-chrome.runtime.onMessage.addListener((message, sender, sendResponse) => {
-    if (message == 'tabs.onActivated') {
-    }
-});
-chrome.storage.sync.get().then(engine.loadUserSettings);

@@ -1,24 +1,6 @@
 namespace engine {
   const linkIcon = new link_icon.LinkIcon();
 
-  // Listen to link element changes and remove tooltips if it happens
-  var observer = new MutationObserver(function(mutations, observer) {
-    mutations.forEach(function(mutation) {
-      if (!(mutation.target instanceof Element)) {
-        return;
-      }
-      const target = mutation.target as Element;
-      // Only look at links
-      if (target.tagName == 'A') {
-        // If a link attribute has changed, remove opentip to generate a new one
-        // if (target.opentip != null) {
-        //   target.opentip = null;
-        // }
-      }
-    });
-  });
-
-
   // User settings
   var userSettings: Record<string, any>;
 
@@ -28,7 +10,25 @@ namespace engine {
     } else {
       userSettings = {};
     }
+  }
 
+  export function observe() {
+    // Listen to link element changes and remove tooltips if it happens
+    const observer = new MutationObserver(function(mutations, observer) {
+      mutations.forEach(function(mutation) {
+        if (!(mutation.target instanceof Element)) {
+          return;
+        }
+        const target = mutation.target as Element;
+        // Only look at links
+        if (target.tagName == 'A') {
+          // If a link attribute has changed, remove opentip to generate a new
+          // one if (target.opentip != null) {
+          //   target.opentip = null;
+          // }
+        }
+      });
+    });
     observer.observe(
         document, {attributes: true, childList: false, subtree: true});
   }
@@ -173,26 +173,30 @@ namespace engine {
 
 }  // namespace engine
 
-// Only listen to mousemove if mouse if over the document
-document.addEventListener(
-    'mouseenter',
-    (event) => {
-        document.addEventListener('mousemove', engine.mousemoveFunction)});
+// Retrieve user settings, start observing, react to mouse movements and tab
+// changes.
+chrome.storage.sync.get().then((value) => {
+  engine.loadUserSettings(value);
+  engine.observe();
 
-// Unbind mousemove if mouse has left the document
-document.addEventListener('mouseleave', (event) => {
-  document.removeEventListener('mousemove', engine.mousemoveFunction);
+  chrome.runtime.onMessage.addListener((message, sender, sendResponse) => {
+    // If another tab is activated, hide the tooltip
+    if (message == 'tabs.onActivated') {
+      // if (last_valid_target != null && last_valid_target.opentip != null &&
+      //     last_valid_target.opentip != -1) {
+      //   last_valid_target.opentip.hide();
+      // }
+    }
+  });
+
+  // Only listen to mousemove if mouse if over the document
+  document.addEventListener(
+      'mouseenter',
+      (event) => {
+          document.addEventListener('mousemove', engine.mousemoveFunction)});
+
+  // Unbind mousemove if mouse has left the document
+  document.addEventListener('mouseleave', (event) => {
+    document.removeEventListener('mousemove', engine.mousemoveFunction);
+  });
 });
-
-chrome.runtime.onMessage.addListener((message, sender, sendResponse) => {
-  // If another tab is activated, hide the tooltip
-  if (message == 'tabs.onActivated') {
-    // if (last_valid_target != null && last_valid_target.opentip != null &&
-    //     last_valid_target.opentip != -1) {
-    //   last_valid_target.opentip.hide();
-    // }
-  }
-});
-
-// Retrieve user settings and start observing.
-chrome.storage.sync.get().then(engine.loadUserSettings);
