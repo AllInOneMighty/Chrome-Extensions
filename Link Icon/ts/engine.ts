@@ -134,16 +134,6 @@ chrome.storage.sync.get().then((value) => {
   engine.loadUserSettings(value);
   engine.observe();
 
-  chrome.runtime.onMessage.addListener((message, sender, sendResponse) => {
-    // If another tab is activated, hide the tooltip
-    if (message == 'tabs.onActivated') {
-      // if (last_valid_target != null && last_valid_target.opentip != null &&
-      //     last_valid_target.opentip != -1) {
-      //   last_valid_target.opentip.hide();
-      // }
-    }
-  });
-
   // Only listen to mousemove if mouse if over the document
   document.addEventListener(
       'mouseenter',

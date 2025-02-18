@@ -94,10 +94,6 @@ document.addEventListener('DOMContentLoaded', (ev) => {
 chrome.storage.sync.get().then((value) => {
     engine.loadUserSettings(value);
     engine.observe();
-    chrome.runtime.onMessage.addListener((message, sender, sendResponse) => {
-        if (message == 'tabs.onActivated') {
-        }
-    });
     document.addEventListener('mouseenter', (event) => {
         document.addEventListener('mousemove', engine.mousemoveFunction);
     });
