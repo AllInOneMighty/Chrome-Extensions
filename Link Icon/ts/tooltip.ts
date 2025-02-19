@@ -77,17 +77,25 @@ namespace tooltip {
     const tooltipElementWidth = tooltipElement.offsetWidth;
 
     // Determine where to display the tooltip relative to viewport
+    const viewHeight = document.documentElement.clientHeight;
     const anchorElementHeight = anchorElement.offsetHeight;
-    const anchorElementWidth = anchorElement.offsetWidth;
     let tooltipElementOffsetLeft =
         anchorElementOffsetLeft - tooltipElementWidth - TOOLTIP_DISTANCE;
     let tooltipElementOffsetTop = anchorElementOffsetTop +
         anchorElementHeight / 2 - tooltipElementHeight / 2;
-    // If tooltip goes beyond left side of viewport, position it to the right
-    // of the anchor element.
+    // If tooltip goes beyond left side of viewport, position it under the
+    // anchor element.
     if (tooltipElementOffsetLeft <= 0) {
-      tooltipElementOffsetLeft =
-          anchorElementOffsetLeft + anchorElementWidth + TOOLTIP_DISTANCE;
+      tooltipElementOffsetLeft = anchorElementOffsetLeft;
+      tooltipElementOffsetTop =
+          anchorElementOffsetTop + anchorElementHeight + TOOLTIP_DISTANCE;
+    }
+    // If tooltip goes beyond bottom side of viewport, position it to the top
+    // of the listener element.
+    if (tooltipElementOffsetTop + tooltipElementHeight >= viewHeight) {
+      tooltipElementOffsetLeft = anchorElementOffsetLeft;
+      tooltipElementOffsetTop =
+          anchorElementOffsetTop - anchorElementHeight - TOOLTIP_DISTANCE;
     }
 
     tooltipElement.style.left = tooltipElementOffsetLeft.toString() + 'px';

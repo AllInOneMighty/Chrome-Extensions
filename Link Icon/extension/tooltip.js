@@ -45,14 +45,20 @@ var tooltip;
         tooltipElement.style.display = 'flex';
         const tooltipElementHeight = tooltipElement.offsetHeight;
         const tooltipElementWidth = tooltipElement.offsetWidth;
+        const viewHeight = document.documentElement.clientHeight;
         const anchorElementHeight = anchorElement.offsetHeight;
-        const anchorElementWidth = anchorElement.offsetWidth;
         let tooltipElementOffsetLeft = anchorElementOffsetLeft - tooltipElementWidth - TOOLTIP_DISTANCE;
         let tooltipElementOffsetTop = anchorElementOffsetTop +
             anchorElementHeight / 2 - tooltipElementHeight / 2;
         if (tooltipElementOffsetLeft <= 0) {
-            tooltipElementOffsetLeft =
-                anchorElementOffsetLeft + anchorElementWidth + TOOLTIP_DISTANCE;
+            tooltipElementOffsetLeft = anchorElementOffsetLeft;
+            tooltipElementOffsetTop =
+                anchorElementOffsetTop + anchorElementHeight + TOOLTIP_DISTANCE;
+        }
+        if (tooltipElementOffsetTop + tooltipElementHeight >= viewHeight) {
+            tooltipElementOffsetLeft = anchorElementOffsetLeft;
+            tooltipElementOffsetTop =
+                anchorElementOffsetTop - anchorElementHeight - TOOLTIP_DISTANCE;
         }
         tooltipElement.style.left = tooltipElementOffsetLeft.toString() + 'px';
         tooltipElement.style.top = tooltipElementOffsetTop.toString() + 'px';
