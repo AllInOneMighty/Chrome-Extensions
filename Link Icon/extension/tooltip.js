@@ -4,7 +4,7 @@ var tooltip;
     tooltip.TOOLTIP_ID = 'e01n2KonBeR9ayn1';
     const DATA_BASE_OFFSET_LEFT = 'baseOffsetLeft';
     const DATA_BASE_OFFSET_TOP = 'baseOffsetTop';
-    const TOOLTIP_DISTANCE = 15;
+    const TOOLTIP_DISTANCE = 5;
     function moveTooltipOnScroll(event) {
         if (!event.currentTarget || event.currentTarget !== event.target) {
             return;
@@ -24,44 +24,39 @@ var tooltip;
         if (!fillTooltipMethod(anchorElement, tooltipElement)) {
             return;
         }
-        let listenerTraversalElement = anchorElement;
-        let listenerElementOffsetLeft = 0;
-        let listenerElementOffsetTop = 0;
-        let isListenerElementFixedPosition = false;
+        let anchorTraversalElement = anchorElement;
+        let anchorElementOffsetLeft = 0;
+        let anchorElementOffsetTop = 0;
+        let isAnchorElementFixedPosition = false;
         do {
-            listenerElementOffsetLeft += listenerTraversalElement.offsetLeft;
-            listenerElementOffsetTop += listenerTraversalElement.offsetTop;
-            isListenerElementFixedPosition = isListenerElementFixedPosition ||
-                getComputedStyle(listenerTraversalElement).position === 'fixed';
-            listenerTraversalElement =
-                listenerTraversalElement.offsetParent;
-        } while (listenerTraversalElement);
-        if (isListenerElementFixedPosition) {
-            listenerElementOffsetLeft += window.scrollX;
-            listenerElementOffsetTop += window.scrollY;
+            anchorElementOffsetLeft += anchorTraversalElement.offsetLeft;
+            anchorElementOffsetTop += anchorTraversalElement.offsetTop;
+            isAnchorElementFixedPosition = isAnchorElementFixedPosition ||
+                getComputedStyle(anchorTraversalElement).position === 'fixed';
+            anchorTraversalElement =
+                anchorTraversalElement.offsetParent;
+        } while (anchorTraversalElement);
+        if (isAnchorElementFixedPosition) {
+            anchorElementOffsetLeft += window.scrollX;
+            anchorElementOffsetTop += window.scrollY;
         }
         tooltipElement.style.top = '0';
         tooltipElement.style.left = '0';
         tooltipElement.style.display = 'flex';
         const tooltipElementHeight = tooltipElement.offsetHeight;
         const tooltipElementWidth = tooltipElement.offsetWidth;
-        const viewHeight = document.documentElement.clientWidth;
-        const viewWidth = document.documentElement.clientWidth;
-        const listenerElementHeight = anchorElement.offsetHeight;
-        let tooltipElementOffsetLeft = listenerElementOffsetLeft;
-        let tooltipElementOffsetTop = listenerElementOffsetTop + listenerElementHeight + TOOLTIP_DISTANCE;
-        if (tooltipElementOffsetLeft + tooltipElementWidth >= viewWidth) {
+        const anchorElementHeight = anchorElement.offsetHeight;
+        const anchorElementWidth = anchorElement.offsetWidth;
+        let tooltipElementOffsetLeft = anchorElementOffsetLeft - tooltipElementWidth - TOOLTIP_DISTANCE;
+        let tooltipElementOffsetTop = anchorElementOffsetTop +
+            anchorElementHeight / 2 - tooltipElementHeight / 2;
+        if (tooltipElementOffsetLeft <= 0) {
             tooltipElementOffsetLeft =
-                listenerElementOffsetLeft - tooltipElementWidth - TOOLTIP_DISTANCE;
-            tooltipElementOffsetTop = listenerElementOffsetTop;
-        }
-        if (tooltipElementOffsetTop + tooltipElementHeight >= viewHeight) {
-            tooltipElementOffsetTop =
-                listenerElementHeight - TOOLTIP_DISTANCE - tooltipElementHeight;
+                anchorElementOffsetLeft + anchorElementWidth + TOOLTIP_DISTANCE;
         }
         tooltipElement.style.left = tooltipElementOffsetLeft.toString() + 'px';
         tooltipElement.style.top = tooltipElementOffsetTop.toString() + 'px';
-        if (isListenerElementFixedPosition) {
+        if (isAnchorElementFixedPosition) {
             tooltipElement.dataset[DATA_BASE_OFFSET_LEFT] =
                 (tooltipElementOffsetLeft - window.scrollX).toString();
             tooltipElement.dataset[DATA_BASE_OFFSET_TOP] =

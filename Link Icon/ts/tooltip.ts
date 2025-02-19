@@ -3,7 +3,7 @@ namespace tooltip {
 
   const DATA_BASE_OFFSET_LEFT = 'baseOffsetLeft';
   const DATA_BASE_OFFSET_TOP = 'baseOffsetTop';
-  const TOOLTIP_DISTANCE = 15;
+  const TOOLTIP_DISTANCE = 5;
 
   function moveTooltipOnScroll(event: Event): void {
     // Only react to events seen on the original element where this method was
@@ -49,23 +49,23 @@ namespace tooltip {
     // Calculate position of listener element. Using getBoundingClientRect()
     // is faster, but we need to traverse the element tree to determine if the
     // position is fixed anyway.
-    let listenerTraversalElement = anchorElement as HTMLElement;
-    let listenerElementOffsetLeft = 0;
-    let listenerElementOffsetTop = 0;
-    let isListenerElementFixedPosition = false;
+    let anchorTraversalElement = anchorElement as HTMLElement;
+    let anchorElementOffsetLeft = 0;
+    let anchorElementOffsetTop = 0;
+    let isAnchorElementFixedPosition = false;
     do {
-      listenerElementOffsetLeft += listenerTraversalElement.offsetLeft;
-      listenerElementOffsetTop += listenerTraversalElement.offsetTop;
-      isListenerElementFixedPosition = isListenerElementFixedPosition ||
-          getComputedStyle(listenerTraversalElement).position === 'fixed';
-      listenerTraversalElement =
-          listenerTraversalElement.offsetParent as HTMLElement;
-    } while (listenerTraversalElement);
+      anchorElementOffsetLeft += anchorTraversalElement.offsetLeft;
+      anchorElementOffsetTop += anchorTraversalElement.offsetTop;
+      isAnchorElementFixedPosition = isAnchorElementFixedPosition ||
+          getComputedStyle(anchorTraversalElement).position === 'fixed';
+      anchorTraversalElement =
+          anchorTraversalElement.offsetParent as HTMLElement;
+    } while (anchorTraversalElement);
 
     // Adding window scroll if element is fixed position
-    if (isListenerElementFixedPosition) {
-      listenerElementOffsetLeft += window.scrollX;
-      listenerElementOffsetTop += window.scrollY;
+    if (isAnchorElementFixedPosition) {
+      anchorElementOffsetLeft += window.scrollX;
+      anchorElementOffsetTop += window.scrollY;
     }
 
     // Need to display tooltip to accurately get its size
@@ -77,32 +77,23 @@ namespace tooltip {
     const tooltipElementWidth = tooltipElement.offsetWidth;
 
     // Determine where to display the tooltip relative to viewport
-    const viewHeight = document.documentElement.clientWidth;
-    const viewWidth = document.documentElement.clientWidth;
-    const listenerElementHeight = anchorElement.offsetHeight;
-    let tooltipElementOffsetLeft = listenerElementOffsetLeft;
-    let tooltipElementOffsetTop =
-        listenerElementOffsetTop + listenerElementHeight + TOOLTIP_DISTANCE;
-    // If tooltip goes beyond right side of viewport, position it to the left
-    // of the listener element.
-    if (tooltipElementOffsetLeft + tooltipElementWidth >= viewWidth) {
+    const anchorElementHeight = anchorElement.offsetHeight;
+    const anchorElementWidth = anchorElement.offsetWidth;
+    let tooltipElementOffsetLeft =
+        anchorElementOffsetLeft - tooltipElementWidth - TOOLTIP_DISTANCE;
+    let tooltipElementOffsetTop = anchorElementOffsetTop +
+        anchorElementHeight / 2 - tooltipElementHeight / 2;
+    // If tooltip goes beyond left side of viewport, position it to the right
+    // of the anchor element.
+    if (tooltipElementOffsetLeft <= 0) {
       tooltipElementOffsetLeft =
-          listenerElementOffsetLeft - tooltipElementWidth - TOOLTIP_DISTANCE;
-      // If we move the tooltip to the left side, also align its top to the
-      // top of the listener element.
-      tooltipElementOffsetTop = listenerElementOffsetTop;
-    }
-    // If tooltip goes beyond bottom side of viewport, position it to the top
-    // of the listener element.
-    if (tooltipElementOffsetTop + tooltipElementHeight >= viewHeight) {
-      tooltipElementOffsetTop =
-          listenerElementHeight - TOOLTIP_DISTANCE - tooltipElementHeight;
+          anchorElementOffsetLeft + anchorElementWidth + TOOLTIP_DISTANCE;
     }
 
     tooltipElement.style.left = tooltipElementOffsetLeft.toString() + 'px';
     tooltipElement.style.top = tooltipElementOffsetTop.toString() + 'px';
 
-    if (isListenerElementFixedPosition) {
+    if (isAnchorElementFixedPosition) {
       // If element is fixed, we need to move the tooltip as the page is
       // scrolled. Save its base offset left/top to be able to reposition it
       // on demand.
