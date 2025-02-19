@@ -130,27 +130,29 @@ namespace engine {
 
 }  // namespace engine
 
-// Create tooltip when DOM is loaded.
+// Retrieve user settings asynchronously. Some user settings might not be taken
+// in account on the first link.
+chrome.storage.sync.get().then((value) => {
+  engine.loadUserSettings(value);
+});
+
+// Create tooltip as soon as DOM is loaded.
 document.addEventListener('DOMContentLoaded', (ev: Event) => {
   const tooltipElement = document.createElement('div');
   tooltipElement.id = tooltip.TOOLTIP_ID;
   document.body.appendChild(tooltipElement);
 });
 
-// Retrieve user settings, start observing, react to mouse movements and tab
-// changes.
-chrome.storage.sync.get().then((value) => {
-  engine.loadUserSettings(value);
-  engine.observe();
+// Only listen to mousemove if mouse is over the document
+document.addEventListener(
+    'mouseenter',
+    (event) => {
+        document.addEventListener('mousemove', engine.mousemoveFunction)});
 
-  // Only listen to mousemove if mouse if over the document
-  document.addEventListener(
-      'mouseenter',
-      (event) => {
-          document.addEventListener('mousemove', engine.mousemoveFunction)});
-
-  // Unbind mousemove if mouse has left the document
-  document.addEventListener('mouseleave', (event) => {
-    document.removeEventListener('mousemove', engine.mousemoveFunction);
-  });
+// Unbind mousemove if mouse has left the document
+document.addEventListener('mouseleave', (event) => {
+  document.removeEventListener('mousemove', engine.mousemoveFunction);
 });
+
+// Observe anchor changes
+engine.observe();

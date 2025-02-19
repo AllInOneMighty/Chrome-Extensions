@@ -92,18 +92,18 @@ var engine;
         }
     };
 })(engine || (engine = {}));
+chrome.storage.sync.get().then((value) => {
+    engine.loadUserSettings(value);
+});
 document.addEventListener('DOMContentLoaded', (ev) => {
     const tooltipElement = document.createElement('div');
     tooltipElement.id = tooltip.TOOLTIP_ID;
     document.body.appendChild(tooltipElement);
 });
-chrome.storage.sync.get().then((value) => {
-    engine.loadUserSettings(value);
-    engine.observe();
-    document.addEventListener('mouseenter', (event) => {
-        document.addEventListener('mousemove', engine.mousemoveFunction);
-    });
-    document.addEventListener('mouseleave', (event) => {
-        document.removeEventListener('mousemove', engine.mousemoveFunction);
-    });
+document.addEventListener('mouseenter', (event) => {
+    document.addEventListener('mousemove', engine.mousemoveFunction);
 });
+document.addEventListener('mouseleave', (event) => {
+    document.removeEventListener('mousemove', engine.mousemoveFunction);
+});
+engine.observe();
