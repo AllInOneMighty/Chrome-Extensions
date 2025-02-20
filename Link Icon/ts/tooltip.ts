@@ -3,7 +3,11 @@ namespace tooltip {
 
   const DATA_BASE_OFFSET_LEFT = 'baseOffsetLeft';
   const DATA_BASE_OFFSET_TOP = 'baseOffsetTop';
-  const TOOLTIP_DISTANCE = 5;
+  const TOOLTIP_DISTANCE = 15;
+
+  const TOOLTIP_LEFT_CLASS = 'left';
+  const TOOLTIP_BELOW_CLASS = 'below';
+  const TOOLTIP_ABOVE_CLASS = 'above';
 
   function moveTooltipOnScroll(event: Event): void {
     // Only react to events seen on the original element where this method was
@@ -83,19 +87,25 @@ namespace tooltip {
         anchorElementOffsetLeft - tooltipElementWidth - TOOLTIP_DISTANCE;
     let tooltipElementOffsetTop = anchorElementOffsetTop +
         anchorElementHeight / 2 - tooltipElementHeight / 2;
+
+    tooltipElement.className = TOOLTIP_LEFT_CLASS;
+
     // If tooltip goes beyond left side of viewport, position it under the
     // anchor element.
-    if (tooltipElementOffsetLeft <= 0) {
+    if (tooltipElementOffsetLeft <= window.scrollY) {
       tooltipElementOffsetLeft = anchorElementOffsetLeft;
       tooltipElementOffsetTop =
           anchorElementOffsetTop + anchorElementHeight + TOOLTIP_DISTANCE;
+      tooltipElement.className = TOOLTIP_BELOW_CLASS;
     }
     // If tooltip goes beyond bottom side of viewport, position it to the top
     // of the listener element.
-    if (tooltipElementOffsetTop + tooltipElementHeight >= viewHeight) {
+    if (tooltipElementOffsetTop + tooltipElementHeight >=
+        window.scrollY + viewHeight) {
       tooltipElementOffsetLeft = anchorElementOffsetLeft;
       tooltipElementOffsetTop =
-          anchorElementOffsetTop - anchorElementHeight - TOOLTIP_DISTANCE;
+          anchorElementOffsetTop - tooltipElementHeight - TOOLTIP_DISTANCE;
+      tooltipElement.className = TOOLTIP_ABOVE_CLASS;
     }
 
     tooltipElement.style.left = tooltipElementOffsetLeft.toString() + 'px';

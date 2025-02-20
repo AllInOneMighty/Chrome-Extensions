@@ -4,7 +4,10 @@ var tooltip;
     tooltip.TOOLTIP_ID = 'e01n2KonBeR9ayn1';
     const DATA_BASE_OFFSET_LEFT = 'baseOffsetLeft';
     const DATA_BASE_OFFSET_TOP = 'baseOffsetTop';
-    const TOOLTIP_DISTANCE = 5;
+    const TOOLTIP_DISTANCE = 15;
+    const TOOLTIP_LEFT_CLASS = 'left';
+    const TOOLTIP_BELOW_CLASS = 'below';
+    const TOOLTIP_ABOVE_CLASS = 'above';
     function moveTooltipOnScroll(event) {
         if (!event.currentTarget || event.currentTarget !== event.target) {
             return;
@@ -50,15 +53,19 @@ var tooltip;
         let tooltipElementOffsetLeft = anchorElementOffsetLeft - tooltipElementWidth - TOOLTIP_DISTANCE;
         let tooltipElementOffsetTop = anchorElementOffsetTop +
             anchorElementHeight / 2 - tooltipElementHeight / 2;
-        if (tooltipElementOffsetLeft <= 0) {
+        tooltipElement.className = TOOLTIP_LEFT_CLASS;
+        if (tooltipElementOffsetLeft <= window.scrollY) {
             tooltipElementOffsetLeft = anchorElementOffsetLeft;
             tooltipElementOffsetTop =
                 anchorElementOffsetTop + anchorElementHeight + TOOLTIP_DISTANCE;
+            tooltipElement.className = TOOLTIP_BELOW_CLASS;
         }
-        if (tooltipElementOffsetTop + tooltipElementHeight >= viewHeight) {
+        if (tooltipElementOffsetTop + tooltipElementHeight >=
+            window.scrollY + viewHeight) {
             tooltipElementOffsetLeft = anchorElementOffsetLeft;
             tooltipElementOffsetTop =
-                anchorElementOffsetTop - anchorElementHeight - TOOLTIP_DISTANCE;
+                anchorElementOffsetTop - tooltipElementHeight - TOOLTIP_DISTANCE;
+            tooltipElement.className = TOOLTIP_ABOVE_CLASS;
         }
         tooltipElement.style.left = tooltipElementOffsetLeft.toString() + 'px';
         tooltipElement.style.top = tooltipElementOffsetTop.toString() + 'px';
