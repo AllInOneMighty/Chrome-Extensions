@@ -3,8 +3,8 @@ var engine;
 (function (engine) {
     const linkIcon = new link_icon.LinkIcon();
     var userSettings;
-    var mouseX = 0;
-    var mouseY = 0;
+    var clientX = 0;
+    var clientY = 0;
     function loadUserSettings(value) {
         if (typeof (value) === 'object') {
             userSettings = value;
@@ -20,7 +20,7 @@ var engine;
                 if (!(mutation.target instanceof HTMLAnchorElement)) {
                     return;
                 }
-                const anchor = findAnchor(document.elementFromPoint(mouseX, mouseY));
+                const anchor = findAnchor(document.elementFromPoint(clientX, clientY));
                 if (anchor == null) {
                     tooltip.hideTooltip();
                     return;
@@ -77,8 +77,8 @@ var engine;
         return findAnchor(target.parentNode);
     }
     engine.mousemoveFunction = (event) => {
-        mouseX = event.clientX;
-        mouseY = event.clientY;
+        clientX = event.clientX;
+        clientY = event.clientY;
         const targetAnchor = findAnchor(event.target);
         if (targetAnchor == null) {
             return;

@@ -4,8 +4,8 @@ namespace engine {
   // User settings
   var userSettings: Record<string, any>;
   // Keeps track of the mouse position to detect when a link disappears.
-  var mouseX = 0;
-  var mouseY = 0;
+  var clientX = 0;
+  var clientY = 0;
 
   export function loadUserSettings(value: {[key: string]: any;}) {
     if (typeof (value) === 'object') {
@@ -26,7 +26,7 @@ namespace engine {
 
         // If mouse is not over an anchor (it has disappeared), hide the
         // tooltip.
-        const anchor = findAnchor(document.elementFromPoint(mouseX, mouseY));
+        const anchor = findAnchor(document.elementFromPoint(clientX, clientY));
         if (anchor == null) {
           tooltip.hideTooltip();
           return;
@@ -106,8 +106,8 @@ namespace engine {
 
   // Will be run each time the mouse is moved
   export const mousemoveFunction = (event: MouseEvent) => {
-    mouseX = event.clientX;
-    mouseY = event.clientY;
+    clientX = event.clientX;
+    clientY = event.clientY;
 
     const targetAnchor = findAnchor(event.target);
     if (targetAnchor == null) {
