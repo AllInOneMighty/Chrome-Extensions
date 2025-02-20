@@ -54,7 +54,7 @@ var tooltip;
         let tooltipElementOffsetTop = anchorElementOffsetTop +
             anchorElementHeight / 2 - tooltipElementHeight / 2;
         tooltipElement.className = TOOLTIP_LEFT_CLASS;
-        if (tooltipElementOffsetLeft <= window.scrollY) {
+        if (tooltipElementOffsetLeft <= window.scrollX) {
             tooltipElementOffsetLeft = anchorElementOffsetLeft;
             tooltipElementOffsetTop =
                 anchorElementOffsetTop + anchorElementHeight + TOOLTIP_DISTANCE;

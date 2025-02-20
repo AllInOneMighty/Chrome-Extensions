@@ -92,7 +92,7 @@ namespace tooltip {
 
     // If tooltip goes beyond left side of viewport, position it under the
     // anchor element.
-    if (tooltipElementOffsetLeft <= window.scrollY) {
+    if (tooltipElementOffsetLeft <= window.scrollX) {
       tooltipElementOffsetLeft = anchorElementOffsetLeft;
       tooltipElementOffsetTop =
           anchorElementOffsetTop + anchorElementHeight + TOOLTIP_DISTANCE;
