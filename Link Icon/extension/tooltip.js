@@ -2,22 +2,10 @@
 var tooltip;
 (function (tooltip) {
     tooltip.TOOLTIP_ID = 'e01n2KonBeR9ayn1';
-    const DATA_BASE_OFFSET_LEFT = 'baseOffsetLeft';
-    const DATA_BASE_OFFSET_TOP = 'baseOffsetTop';
     const TOOLTIP_DISTANCE = 15;
     const TOOLTIP_LEFT_CLASS = 'left';
     const TOOLTIP_BELOW_CLASS = 'below';
     const TOOLTIP_ABOVE_CLASS = 'above';
-    function moveTooltipOnScroll(event) {
-        if (!event.currentTarget || event.currentTarget !== event.target) {
-            return;
-        }
-        const tooltipElement = document.querySelector('.tooltip');
-        const tooltipNewLeft = Number(tooltipElement.dataset[DATA_BASE_OFFSET_LEFT]) + window.scrollX;
-        const tooltipNewTop = Number(tooltipElement.dataset[DATA_BASE_OFFSET_TOP]) + window.scrollY;
-        tooltipElement.style.left = tooltipNewLeft.toString() + 'px';
-        tooltipElement.style.top = tooltipNewTop.toString() + 'px';
-    }
     function showTooltip(anchorElement, fillTooltipMethod) {
         const tooltipElement = document.querySelector('#' + tooltip.TOOLTIP_ID);
         if (tooltipElement == null) {
@@ -27,55 +15,32 @@ var tooltip;
         if (!fillTooltipMethod(anchorElement, tooltipElement)) {
             return;
         }
-        let anchorTraversalElement = anchorElement;
-        let anchorElementOffsetLeft = 0;
-        let anchorElementOffsetTop = 0;
-        let isAnchorElementFixedPosition = false;
-        do {
-            anchorElementOffsetLeft += anchorTraversalElement.offsetLeft;
-            anchorElementOffsetTop += anchorTraversalElement.offsetTop;
-            isAnchorElementFixedPosition = isAnchorElementFixedPosition ||
-                getComputedStyle(anchorTraversalElement).position === 'fixed';
-            anchorTraversalElement =
-                anchorTraversalElement.offsetParent;
-        } while (anchorTraversalElement);
-        if (isAnchorElementFixedPosition) {
-            anchorElementOffsetLeft += window.scrollX;
-            anchorElementOffsetTop += window.scrollY;
-        }
+        const anchorClientRect = anchorElement.getBoundingClientRect();
         tooltipElement.style.top = '0';
         tooltipElement.style.left = '0';
         tooltipElement.style.display = 'flex';
         const tooltipElementHeight = tooltipElement.offsetHeight;
         const tooltipElementWidth = tooltipElement.offsetWidth;
-        const viewHeight = document.documentElement.clientHeight;
         const anchorElementHeight = anchorElement.offsetHeight;
-        let tooltipElementOffsetLeft = anchorElementOffsetLeft - tooltipElementWidth - TOOLTIP_DISTANCE;
-        let tooltipElementOffsetTop = anchorElementOffsetTop +
+        let tooltipElementViewportLeft = anchorClientRect.left - tooltipElementWidth - TOOLTIP_DISTANCE;
+        let tooltipElementViewportTop = anchorClientRect.top +
             anchorElementHeight / 2 - tooltipElementHeight / 2;
         tooltipElement.className = TOOLTIP_LEFT_CLASS;
-        if (tooltipElementOffsetLeft <= window.scrollX) {
-            tooltipElementOffsetLeft = anchorElementOffsetLeft;
-            tooltipElementOffsetTop =
-                anchorElementOffsetTop + anchorElementHeight + TOOLTIP_DISTANCE;
+        if (tooltipElementViewportLeft <= 0) {
+            tooltipElementViewportLeft = anchorClientRect.left;
+            tooltipElementViewportTop =
+                anchorClientRect.top + anchorElementHeight + TOOLTIP_DISTANCE;
             tooltipElement.className = TOOLTIP_BELOW_CLASS;
         }
-        if (tooltipElementOffsetTop + tooltipElementHeight >=
-            window.scrollY + viewHeight) {
-            tooltipElementOffsetLeft = anchorElementOffsetLeft;
-            tooltipElementOffsetTop =
-                anchorElementOffsetTop - tooltipElementHeight - TOOLTIP_DISTANCE;
+        if (tooltipElementViewportTop + tooltipElementHeight >=
+            window.innerHeight) {
+            tooltipElementViewportLeft = anchorClientRect.left;
+            tooltipElementViewportTop =
+                anchorClientRect.top - tooltipElementHeight - TOOLTIP_DISTANCE;
             tooltipElement.className = TOOLTIP_ABOVE_CLASS;
         }
-        tooltipElement.style.left = tooltipElementOffsetLeft.toString() + 'px';
-        tooltipElement.style.top = tooltipElementOffsetTop.toString() + 'px';
-        if (isAnchorElementFixedPosition) {
-            tooltipElement.dataset[DATA_BASE_OFFSET_LEFT] =
-                (tooltipElementOffsetLeft - window.scrollX).toString();
-            tooltipElement.dataset[DATA_BASE_OFFSET_TOP] =
-                (tooltipElementOffsetTop - window.scrollY).toString();
-            document.addEventListener('scroll', moveTooltipOnScroll);
-        }
+        tooltipElement.style.left = tooltipElementViewportLeft.toString() + 'px';
+        tooltipElement.style.top = tooltipElementViewportTop.toString() + 'px';
     }
     tooltip.showTooltip = showTooltip;
     function hideTooltip() {
@@ -83,9 +48,6 @@ var tooltip;
         if (tooltipElement == null) {
             return;
         }
-        tooltipElement.dataset[DATA_BASE_OFFSET_LEFT] = '';
-        tooltipElement.dataset[DATA_BASE_OFFSET_TOP] = '';
-        document.removeEventListener('scroll', moveTooltipOnScroll);
         tooltipElement.style.display = 'none';
     }
     tooltip.hideTooltip = hideTooltip;

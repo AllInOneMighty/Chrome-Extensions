@@ -2,10 +2,35 @@ namespace engine {
   const linkIcon = new link_icon.LinkIcon();
 
   // User settings
-  var userSettings: Record<string, any>;
+  let userSettings: Record<string, any>;
   // Keeps track of the mouse position to detect when a link disappears.
-  var clientX = 0;
-  var clientY = 0;
+  let clientX = 0;
+  let clientY = 0;
+
+  let timeoutId: number|undefined;
+
+  /**
+   * Recursively matches the first anchor with the given element or one of its
+   * parents.
+   */
+  function findAnchor(target: EventTarget|Node|null): HTMLAnchorElement
+      |undefined {
+    if (target == null || !(target instanceof Node)) {
+      return undefined;
+    }
+    if (target instanceof HTMLAnchorElement) {
+      return target;
+    }
+    return findAnchor(target.parentNode);
+  }
+
+  /**
+   * Returns the anchor pointed at by the current mouse position, or `undefined`
+   * if it could not be found.
+   */
+  function anchorFromPoint(): HTMLAnchorElement|undefined {
+    return findAnchor(document.elementFromPoint(clientX, clientY));
+  }
 
   export function loadUserSettings(value: {[key: string]: any;}) {
     if (typeof (value) === 'object') {
@@ -26,18 +51,17 @@ namespace engine {
 
         // If mouse is not over an anchor (it has disappeared), hide the
         // tooltip.
-        const anchor = findAnchor(document.elementFromPoint(clientX, clientY));
-        if (anchor == null) {
+        const anchorElement = anchorFromPoint();
+        if (anchorElement == null) {
           tooltip.hideTooltip();
           return;
         }
 
         // If the anchor's attributes has changed (except 'data-' which are used
-        // for rendering), hide and show the tooltip to potentially update it.
+        // for rendering), force show the tooltip to potentially update it.
         if (mutation.type == 'attributes' &&
             !mutation.attributeName?.startsWith('data-')) {
-          tooltip.hideTooltip();
-          tooltip.showTooltip(anchor, maybeFillTooltipContents);
+          tooltip.showTooltip(anchorElement, maybeFillTooltipContents);
         }
       });
     });
@@ -45,26 +69,32 @@ namespace engine {
         document, {attributes: true, childList: false, subtree: true});
   }
 
-  // Fills the given tooltip with icons related to the given anchor, or returns
-  // `false` if nothing was filled.
+  /**
+   * Fills the given tooltip with icons related to the given anchor, or returns
+   * `false` if nothing was filled.
+   */
   function maybeFillTooltipContents(
       anchor: HTMLAnchorElement, tooltipElement: HTMLElement): boolean {
     const iconsToShow = new Set<link_icon.IconId>();
 
     // Compute URL extension here to do it only once per URL and not once per
     // icon and per URL.
-    const url = new URL(anchor.href);
-    var urlExtension = '';
-    if (url.protocol == link_icon.Protocol.HTTP ||
-        url.protocol == link_icon.Protocol.HTTPS ||
-        url.protocol == link_icon.Protocol.FTP ||
-        url.protocol == link_icon.Protocol.FILE) {
-      urlExtension = url.pathname.substring(url.pathname.lastIndexOf('.'));
+    let url: URL|undefined = undefined;
+    let urlLastExtension = '';
+    if (anchor.href) {
+      url = new URL(anchor.href);
+      if (url.protocol == link_icon.Protocol.HTTP ||
+          url.protocol == link_icon.Protocol.HTTPS ||
+          url.protocol == link_icon.Protocol.FTP ||
+          url.protocol == link_icon.Protocol.FILE) {
+        urlLastExtension =
+            url.pathname.substring(url.pathname.lastIndexOf('.'));
+      }
     }
 
     for (const icon of linkIcon.iconsByPriority) {
       if (icon.isEnabled(userSettings) &&
-          icon.matches(document.location, anchor, urlExtension)) {
+          icon.matches(document.location, anchor, url, urlLastExtension)) {
         icon.addAndMaybeDeactivate(iconsToShow);
       }
     }
@@ -91,41 +121,80 @@ namespace engine {
     return true;
   }
 
-  // Recursively matches the first anchor with the given element or one of its
-  // parents.
-  function findAnchor(target: EventTarget|Node|null): HTMLAnchorElement
-      |undefined {
-    if (target == null || !(target instanceof Node)) {
-      return undefined;
-    }
-    if (target instanceof HTMLAnchorElement) {
-      return target;
-    }
-    return findAnchor(target.parentNode);
-  }
-
-  // Will be run each time the mouse is moved
-  export const mousemoveFunction = (event: MouseEvent) => {
-    clientX = event.clientX;
-    clientY = event.clientY;
-
-    const targetAnchor = findAnchor(event.target);
-    if (targetAnchor == null) {
-      return;
-    }
-
-    if (!(tooltip.TOOLTIP_ID in targetAnchor.dataset)) {
+  /**
+   * Adds tooltip event listeners to the given anchor if they are not already
+   * present.
+   *
+   * @param anchorElement The anchor element to which add the listeners.
+   * @returns `true` if listeners were added, `false` if they already existed.
+   */
+  function maybeAddTooltipEventListeners(anchorElement: HTMLAnchorElement):
+      boolean {
+    if (!(tooltip.TOOLTIP_ID in anchorElement.dataset)) {
       // Save that event listeners have been added to not re-add them every
       // time.
-      targetAnchor.dataset[tooltip.TOOLTIP_ID] = '1';
+      anchorElement.dataset[tooltip.TOOLTIP_ID] = '1';
       tooltip.addTooltipEventListeners(
-          targetAnchor,
+          anchorElement,
           (anchorElement: HTMLAnchorElement, tooltipElement: HTMLElement) => {
             return maybeFillTooltipContents(anchorElement, tooltipElement);
           });
-      // Mouse is already over anchor, so force showing the tooltip.
-      tooltip.showTooltip(targetAnchor, maybeFillTooltipContents);
+      return true;
     }
+    return false;
+  }
+
+  export const mousemoveEventListener = (ev: MouseEvent) => {
+    clientX = ev.clientX;
+    clientY = ev.clientY;
+
+    const anchorElement = anchorFromPoint();
+    if (anchorElement == null) {
+      return;
+    }
+
+    if (maybeAddTooltipEventListeners(anchorElement)) {
+      // Mouse is already over anchor, so force showing the tooltip.
+      tooltip.showTooltip(anchorElement, maybeFillTooltipContents);
+    }
+  };
+
+  export const scrollEventListener = (_ev: Event) => {
+    tooltip.hideTooltip();
+  };
+
+  export const scrollendEventListener = (_ev: Event) => {
+    const anchorElement = anchorFromPoint();
+    if (anchorElement == null) {
+      return;
+    }
+
+    maybeAddTooltipEventListeners(anchorElement);
+    // Scrolling on an element does not trigger mouseenter, so forcibly show the
+    // tooltip every time.
+    tooltip.showTooltip(anchorElement, maybeFillTooltipContents);
+  };
+
+  export const wheelEventListener = (_ev: WheelEvent) => {
+    tooltip.hideTooltip();
+
+    if (timeoutId != undefined) {
+      clearTimeout(timeoutId);
+    }
+
+    timeoutId = setTimeout(() => {
+      const anchorElement = anchorFromPoint();
+      if (anchorElement == null) {
+        return;
+      }
+
+      maybeAddTooltipEventListeners(anchorElement);
+      // It is not guaranteed that a mousenter event is fired, so always show
+      // the tooltip.
+      tooltip.showTooltip(anchorElement, maybeFillTooltipContents);
+
+      timeoutId = undefined;
+    }, 200);
   };
 
 }  // namespace engine
@@ -143,15 +212,20 @@ document.addEventListener('DOMContentLoaded', (ev: Event) => {
   document.body.appendChild(tooltipElement);
 });
 
-// Only listen to mousemove if mouse is over the document
-document.addEventListener(
-    'mouseenter',
-    (event) => {
-        document.addEventListener('mousemove', engine.mousemoveFunction)});
+// Only listen if mouse is over the document.
+document.addEventListener('mouseenter', (event) => {
+  document.addEventListener('mousemove', engine.mousemoveEventListener);
+  document.addEventListener('scroll', engine.scrollEventListener);
+  document.addEventListener('scrollend', engine.scrollendEventListener);
+  document.addEventListener('wheel', engine.wheelEventListener);
+});
 
-// Unbind mousemove if mouse has left the document
+// Remove listeners if mouse leaves the document.
 document.addEventListener('mouseleave', (event) => {
-  document.removeEventListener('mousemove', engine.mousemoveFunction);
+  document.removeEventListener('mousemove', engine.mousemoveEventListener);
+  document.removeEventListener('scroll', engine.scrollEventListener);
+  document.removeEventListener('scrollend', engine.scrollendEventListener);
+  document.removeEventListener('wheel', engine.wheelEventListener);
 });
 
 // Observe anchor changes

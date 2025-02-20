@@ -1453,7 +1453,7 @@ namespace tld {
     const invertedHost = host.split('.').reverse();
 
     // Now try to find the first part does not match a TLD
-    for (var i = 0; i < invertedHost.length; i++) {
+    for (let i = 0; i < invertedHost.length; i++) {
       const part = invertedHost[i];
       if (TLDS.indexOf(part) < 0) {
         // Not found in list of TLDs

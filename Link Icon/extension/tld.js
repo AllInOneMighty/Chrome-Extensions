@@ -1450,7 +1450,7 @@ var tld;
     ];
     function getRootDomainName(host) {
         const invertedHost = host.split('.').reverse();
-        for (var i = 0; i < invertedHost.length; i++) {
+        for (let i = 0; i < invertedHost.length; i++) {
             const part = invertedHost[i];
             if (TLDS.indexOf(part) < 0) {
                 if (part == 'www') {
