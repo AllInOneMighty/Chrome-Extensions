@@ -1,4 +1,6 @@
 namespace link_icon {
+  export const ICON_ID_PREFIX = 'icon-';
+
   export const enum IconId {
     _BLANK = '_blank',
     AIM = 'aim',
@@ -163,15 +165,12 @@ namespace link_icon {
 
     isEnabled(settings: Record<string, any>): boolean {
       if (settings == undefined) {
-        // No settings? We consider everything is enabled
+        // No settings? We consider everything is enabled.
         return true;
       }
 
-      if (settings['icons.' + this.id + '.enabled'] == undefined) {
-        return true;
-      } else {
-        return settings['icons.' + this.id + '.enabled'];
-      }
+      const value = settings[ICON_ID_PREFIX + this.id];
+      return value === undefined || value;
     }
 
     addAndMaybeDeactivate(iconsToShow: Set<IconId>) {

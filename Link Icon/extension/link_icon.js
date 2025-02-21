@@ -1,6 +1,7 @@
 "use strict";
 var link_icon;
 (function (link_icon) {
+    link_icon.ICON_ID_PREFIX = 'icon-';
     class Icon {
         id;
         name;
@@ -27,12 +28,8 @@ var link_icon;
             if (settings == undefined) {
                 return true;
             }
-            if (settings['icons.' + this.id + '.enabled'] == undefined) {
-                return true;
-            }
-            else {
-                return settings['icons.' + this.id + '.enabled'];
-            }
+            const value = settings[link_icon.ICON_ID_PREFIX + this.id];
+            return value === undefined || value;
         }
         addAndMaybeDeactivate(iconsToShow) {
             iconsToShow.add(this.id);

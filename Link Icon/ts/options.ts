@@ -25,12 +25,12 @@ namespace options {
 
       const checkboxInput = document.createElement('input');
       checkboxInput.type = 'checkbox';
-      checkboxInput.id = 'icon-' + icon.id;
+      checkboxInput.id = link_icon.ICON_ID_PREFIX + icon.id;
       checkboxInput.addEventListener('click', saveOption)
       li.appendChild(checkboxInput);
 
       const label = document.createElement('label');
-      label.setAttribute('for', 'icon-' + icon.id);
+      label.setAttribute('for', link_icon.ICON_ID_PREFIX + icon.id);
 
       const imageSpan = document.createElement('span');
       imageSpan.style.background =
@@ -40,14 +40,20 @@ namespace options {
       imageSpan.style.width = '16px';
       label.appendChild(imageSpan);
 
-      const descriptionSpan = document.createElement('span');
-      const titleSpan = document.createElement('span');
-      titleSpan.style.cssText = 'font-weight:bold;';
-      titleSpan.textContent = ' ' + icon.name + ': ';
+      const infoDiv = document.createElement('div');
 
+      const titleSpan = document.createElement('span');
+      titleSpan.classList.add('title');
+      titleSpan.textContent = icon.name;
+
+      const descriptionSpan = document.createElement('span');
+      descriptionSpan.classList.add('description');
       descriptionSpan.textContent = icon.description;
-      descriptionSpan.insertBefore(titleSpan, descriptionSpan.firstChild);
-      label.appendChild(descriptionSpan);
+
+      infoDiv.appendChild(titleSpan);
+      infoDiv.appendChild(descriptionSpan);
+
+      label.appendChild(infoDiv);
 
       li.appendChild(label);
       ul.appendChild(li);
@@ -57,10 +63,10 @@ namespace options {
   export function refreshOptionsState() {
     for (const icon of linkIcon.iconsBySettingsOrder) {
       const checkboxInput =
-          document.querySelector('#icon-' + icon.id)! as HTMLInputElement;
-      const enabled =
-          userSettings['icons.' + icon.id + '.enabled'] === undefined ||
-          userSettings['icons.' + icon.id + '.enabled'];
+          document.querySelector('#' + link_icon.ICON_ID_PREFIX + icon.id)! as
+          HTMLInputElement;
+      const value = userSettings[link_icon.ICON_ID_PREFIX + icon.id];
+      const enabled = value === undefined || value;
       checkboxInput.checked = enabled;
     }
   }
