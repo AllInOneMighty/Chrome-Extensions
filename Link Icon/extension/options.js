@@ -1,92 +1,70 @@
-// User settings
-var userSettings;
-
-function buildOptions() {
-  var iconsBySettingsOrder = LinkIcon.getIconsBySettingsOrder();
-
-  var ul = document.getElementById('ul_icons');
-  for (var index in iconsBySettingsOrder) {
-    var icon = iconsBySettingsOrder[index];
-
-    var li = document.createElement('li');
-
-    var input = document.createElement('input');
-    input.type = 'checkbox';
-    input.id = 'icon_' + icon.id;
-    li.appendChild(input);
-
-    var label = document.createElement('label');
-    label.setAttribute('for', 'icon_' + icon.id);
-
-    var ispan = document.createElement('span');
-    ispan.style.background =
-        'url("data:image/png;base64,' + icon.image.base64 + '")';
-    ispan.style.display = 'inline-block';
-    ispan.style.height = icon.image.height;
-    ispan.style.width = icon.image.width;
-    label.appendChild(ispan);
-
-    var span = document.createElement('span');
-    var bspan = document.createElement('span');
-    bspan.style.cssText = 'font-weight:bold;';
-    bspan.textContent = ' ' + icon.name + ': ';
-
-    span.textContent = icon.description;
-    span.insertBefore(bspan, span.firstChild);
-    label.appendChild(span);
-
-    li.appendChild(label);
-    ul.appendChild(li);
-  }
-}
-
-function refreshOptions() {
-  var iconsBySettingsOrder = LinkIcon.getIconsBySettingsOrder();
-
-  for (var index in iconsBySettingsOrder) {
-    var icon = iconsBySettingsOrder[index];
-    if (typeof (userSettings['icons.' + icon.id + '.enabled']) ===
-        'undefined') {
-      console.log('reset');
-      userSettings['icons.' + icon.id + '.enabled'] = true;
+"use strict";
+var options;
+(function (options) {
+    const linkIcon = new link_icon.LinkIcon();
+    let userSettings;
+    function loadUserSettings(value) {
+        if (typeof (value) === 'object') {
+            userSettings = value;
+        }
+        else {
+            userSettings = {};
+        }
     }
-
-    if (userSettings['icons.' + icon.id + '.enabled']) {
-      document.getElementById('icon_' + icon.id).checked = true;
-    } else {
-      document.getElementById('icon_' + icon.id).checked = false;
+    options.loadUserSettings = loadUserSettings;
+    function saveOption(ev) {
+        const checkboxInput = ev.target;
+        userSettings[checkboxInput.id] = checkboxInput.checked;
+        chrome.storage.sync.set(userSettings);
     }
-  }
-}
-
-// Retrieve user settings and start observing.
-chrome.storage.sync.get().then((value) => {
-  if (typeof (value) === 'object') {
-    userSettings = value;
-  } else {
-    userSettings = {};
-  }
-
-  $(document).ready(function() {
-    $('#bu_save_options').click(function() {
-      var iconsBySettingsOrder = LinkIcon.getIconsBySettingsOrder();
-      for (var index in iconsBySettingsOrder) {
-        var icon = iconsBySettingsOrder[index];
-        userSettings['icons.' + icon.id + '.enabled'] =
-            document.getElementById('icon_' + icon.id).checked ? true : false;
-      }
-      chrome.storage.sync.set(userSettings);
-      $('#confirm').fadeIn('fast');
-      $('#confirm').fadeOut(2000);
+    function buildOptionsDom() {
+        const ul = document.getElementById('ul-icons');
+        for (const icon of linkIcon.iconsBySettingsOrder) {
+            const li = document.createElement('li');
+            const checkboxInput = document.createElement('input');
+            checkboxInput.type = 'checkbox';
+            checkboxInput.id = 'icon-' + icon.id;
+            checkboxInput.addEventListener('click', saveOption);
+            li.appendChild(checkboxInput);
+            const label = document.createElement('label');
+            label.setAttribute('for', 'icon-' + icon.id);
+            const imageSpan = document.createElement('span');
+            imageSpan.style.background =
+                'url("data:image/png;base64,' + icon.imageBase64 + '")';
+            imageSpan.style.display = 'inline-block';
+            imageSpan.style.height = '16px';
+            imageSpan.style.width = '16px';
+            label.appendChild(imageSpan);
+            const descriptionSpan = document.createElement('span');
+            const titleSpan = document.createElement('span');
+            titleSpan.style.cssText = 'font-weight:bold;';
+            titleSpan.textContent = ' ' + icon.name + ': ';
+            descriptionSpan.textContent = icon.description;
+            descriptionSpan.insertBefore(titleSpan, descriptionSpan.firstChild);
+            label.appendChild(descriptionSpan);
+            li.appendChild(label);
+            ul.appendChild(li);
+        }
+    }
+    options.buildOptionsDom = buildOptionsDom;
+    function refreshOptionsState() {
+        for (const icon of linkIcon.iconsBySettingsOrder) {
+            const checkboxInput = document.querySelector('#icon-' + icon.id);
+            const enabled = userSettings['icons.' + icon.id + '.enabled'] === undefined ||
+                userSettings['icons.' + icon.id + '.enabled'];
+            checkboxInput.checked = enabled;
+        }
+    }
+    options.refreshOptionsState = refreshOptionsState;
+    options.closeEventListener = (_ev) => {
+        window.close();
+    };
+})(options || (options = {}));
+document.addEventListener('DOMContentLoaded', (ev) => {
+    document.querySelector('#close-button').addEventListener('click', options.closeEventListener);
+    options.buildOptionsDom();
+    chrome.storage.sync.get().then((value) => {
+        options.loadUserSettings(value);
+        options.refreshOptionsState();
     });
-    $('#bu_refresh_options').click(function() {
-      refreshOptions();
-    });
-    $('#bu_close').click(function() {
-      window.close();
-    });
-
-    buildOptions();
-    refreshOptions();
-  });
 });

@@ -24,14 +24,14 @@ h1 {
   margin:0;
 }
 
-ul.no_style_type {
+ul.no-style-type {
 	list-style-type:none;
 	padding-left:0;
 }
-ul#ul_icons input {
+ul#ul-icons input {
   vertical-align:top;
 }
-ul#ul_icons span {
+ul#ul-icons span {
   vertical-align:top;
 }
 dl dt {
