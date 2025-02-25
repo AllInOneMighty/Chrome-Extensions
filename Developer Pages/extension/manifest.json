@@ -1,11 +1,11 @@
 {
-	"manifest_version": 2,
-	"name": "Developer pages",
-	"description": "Quick access to Chrome developer pages in the context menu.",
-	"version": "1.4",
+	"manifest_version": 3,
+	"name": "Browser Links",
+	"description": "Quick access to Chrome pages in the context menu.",
+	"version": "1.5",
 	"permissions": ["contextMenus"],
 	"background": {
-		"scripts": ["engine.js"]
+		"service_worker": "service_worker.js"
 	},
 	"icons": {
 		"128": "images/extension/128.png",
