@@ -13,6 +13,8 @@ namespace developer_pages {
     FUN = 'fun',
     HISTORY = 'history',
     INTERNALS = 'internals',
+    MEDIA = 'media',
+    ON_DEVICE = 'on-device',
     REFERENCE = 'reference',
     SETTINGS = 'settings',
   }
@@ -20,47 +22,87 @@ namespace developer_pages {
   // Enums used in 'in' check cannot be const.
   export enum ClickableMenuId {
     ABOUT = 'about',
+    ACCESSIBILITY = 'accessibility',
     ALL_PAGES = 'all-pages',
     APP_SERVICE_INTERNAL = 'app-service-internals',
     APPS = 'apps',
     ATTRIBUTION_INTERNALS = 'attribution-internals',
+    AUTOFILL_INTERNALS = 'autofill-internals',
+    BLOB_INTERNALS = 'blob-internals',
+    BLUETOOTH_INTERNALS = 'bluetooth-internals',
     BOOKMARKS = 'bookmarks',
     BOOKMARKS_SIDE_PANEL = 'bookmarks-side-panel',
+    COMMERCE_INTERNALS = 'commerce-internals',
     COMPONENTS = 'components',
+    CONNECTORS_INTERNALS = 'connectors-internals',
     CRASHES = 'crashes',
     CREDITS = 'credits',
+    DATA_SHARING_INTERNALS = 'data-sharing-internals',
     DEVICE_LOG = 'device-log',
     DEVTOOLS = 'insepct',
     DINO = 'dino',
     DISCARDS = 'discards',
+    DOWNLOAD_INTERNALS = 'download-internals',
     DOWNLOADS = 'downloads',
     EXTENSIONS = 'extensions',
+    EXTENSIONS_INTERNALS = 'extensions-internals',
+    FAMILY_LINK_USER_INTERNALS = 'family-link-user-internals',
     FLAGS = 'flags',
+    GCM_INTERNALS = 'gcm-internals',
+    GPU = 'gpu',
     HISTOGRAMS = 'histograms',
     HISTORY_CLUSTERS = 'history-clusters',
     HISTORY_VIEW = 'history-view',
+    INDEXEDDB_INTERNALS = 'indexeddb-internals',
     INTERSTITIALS = 'interstitials',
     LINUX_PROXY_CONFIG = 'linux-proxy-config',
     LOCAL_STATE = 'local-state',
+    LOCATION_INTERNALS = 'location-internals',
     MANAGEMENT = 'management',
     MEDIA_ENGAGEMENT = 'media-engagement',
+    MEDIA_INTERNALS = 'media-internals',
+    MEDIA_ROUTER_INTERNALS = 'media-router-internals',
+    MEMORY_INTERNALS = 'memory-internals',
+    METRICS_INTERNALS = 'metrics-internals',
+    NET_INTERNALS = 'net-internals',
     NETWORK_ERRORS = 'network-errors',
     NETWORK_LOG_EXPORT = 'network-log-export',
+    NTP_TILES_INTERNALS = 'ntp-tiles-internals',
     OMNIBOX = 'omnibox',
+    ON_DEVICE_INTERNALS = 'on-device-internals',
+    ON_DEVICE_TRANSLATION_INTERNALS = 'on-device-translation-internals',
+    OPTIMIZATION_GUIDE_INTERNALS = 'optimization-guide-internals',
     PASSWORD_MANAGER = 'password-manager',
+    PASSWORD_MANAGER_INTERNALS = 'password-manager-internals',
     POLICIES = 'policies',
     PREDICTORS = 'predictors',
+    PREFERENCES_INTERNALS = 'prefs-internals',
+    PRIVATE_AGGREGATION_INTERNALS = 'private-aggregation-internals',
+    PROCESS_INTERNALS = 'process-internals',
     PROFILES = 'profiles',
+    QUOTA_INTERNALS = 'quota-internals',
     READING_LIST = 'reading-list',
     SAFE_BROWSING = 'safe-browsing',
     SANDBOX_STATUS = 'sandbox-status',
+    SEGMENTATION_INTERNALS = 'segmentation-internals',
+    SERVICEWORKER_INTERNALS = 'serviceworker-internals',
+    SESSION_SERVICE = 'session-service',
     SETTINGS = 'settings',
+    SIGNIN_INTERNALS = 'signin-internals',
     SITE_ENGAGEMENT = 'site-engagement',
+    SYNC_INTERNALS = 'sync-internals',
     SYSTEM = 'system',
     TERMS = 'terms',
+    TOPICS_INTERNALS = 'topics-internals',
+    TRACES_INTERNALS = 'traces-internals',
     TRACING = 'tracing',
+    TRANSLATE_INTERNALS = 'translate-internals',
     UKM = 'ukm',
+    USB_INTERNALS = 'usb-internals',
     USER_ACTIONS = 'user-actions',
+    USER_EDUCATION_INTERNALS = 'user-education-internals',
+    WEB_APP_INTERNALS = 'web-app-internals',
+    WEBRTC_INTERNALS = 'webrtc-internals',
     VERSION = 'version',
     WEBRTC_LOGS = 'webrtc-logs',
     WEBUI_GALLERY = 'webui-gallery',
@@ -120,7 +162,7 @@ namespace developer_pages {
 
   let nextSeparatorId = 1;
 
-  export function addMenuGroup(
+  export function addGroupMenu(
       id: GroupMenuId, title: string, parentId?: GroupMenuId) {
     chrome.contextMenus.create({
       'id': GROUP_PREFIX + id,
@@ -154,7 +196,7 @@ namespace developer_pages {
   }
 }  // namespace developer_pages
 
-developer_pages.addMenuGroup(
+developer_pages.addGroupMenu(
     developer_pages.GroupMenuId.BROWSER_LINKS, 'Browser Links');
 
 developer_pages.addClickableMenu(
@@ -178,7 +220,7 @@ developer_pages.addClickableMenu(
 developer_pages.addClickableMenu(
     developer_pages.ClickableMenuId.FLAGS, '🚩 Flags',
     developer_pages.GroupMenuId.BROWSER_LINKS)
-developer_pages.addMenuGroup(
+developer_pages.addGroupMenu(
     developer_pages.GroupMenuId.HISTORY, '🕑 History',
     developer_pages.GroupMenuId.BROWSER_LINKS)
 developer_pages.addClickableMenu(
@@ -202,7 +244,7 @@ developer_pages.addClickableMenu(
 
 developer_pages.addSeparator(developer_pages.GroupMenuId.BROWSER_LINKS);
 
-developer_pages.addMenuGroup(
+developer_pages.addGroupMenu(
     developer_pages.GroupMenuId.DEBUG, 'Debug',
     developer_pages.GroupMenuId.BROWSER_LINKS)
 developer_pages.addClickableMenu(
@@ -259,16 +301,152 @@ developer_pages.addClickableMenu(
 developer_pages.addClickableMenu(
     developer_pages.ClickableMenuId.WEBUI_JAVASCRIPT_ERROR,
     'WebUI JavaScript Error', developer_pages.GroupMenuId.DEBUG)
-developer_pages.addMenuGroup(
+
+developer_pages.addGroupMenu(
     developer_pages.GroupMenuId.FUN, 'Fun',
     developer_pages.GroupMenuId.BROWSER_LINKS)
 developer_pages.addClickableMenu(
     developer_pages.ClickableMenuId.DINO, '🦖 Dino',
     developer_pages.GroupMenuId.FUN)
-developer_pages.addMenuGroup(
+
+developer_pages.addGroupMenu(
     developer_pages.GroupMenuId.INTERNALS, 'Internals',
     developer_pages.GroupMenuId.BROWSER_LINKS)
-developer_pages.addMenuGroup(
+developer_pages.addClickableMenu(
+    developer_pages.ClickableMenuId.ACCESSIBILITY, 'Accessibility',
+    developer_pages.GroupMenuId.INTERNALS)
+developer_pages.addClickableMenu(
+    developer_pages.ClickableMenuId.APP_SERVICE_INTERNAL, 'App Service',
+    developer_pages.GroupMenuId.INTERNALS)
+developer_pages.addClickableMenu(
+    developer_pages.ClickableMenuId.ATTRIBUTION_INTERNALS, 'Attribution',
+    developer_pages.GroupMenuId.INTERNALS)
+developer_pages.addClickableMenu(
+    developer_pages.ClickableMenuId.AUTOFILL_INTERNALS, 'Autofill',
+    developer_pages.GroupMenuId.INTERNALS)
+developer_pages.addClickableMenu(
+    developer_pages.ClickableMenuId.BLOB_INTERNALS, 'Blob',
+    developer_pages.GroupMenuId.INTERNALS)
+developer_pages.addClickableMenu(
+    developer_pages.ClickableMenuId.BLUETOOTH_INTERNALS, 'Bluetooth',
+    developer_pages.GroupMenuId.INTERNALS)
+developer_pages.addClickableMenu(
+    developer_pages.ClickableMenuId.COMMERCE_INTERNALS, 'Commerce',
+    developer_pages.GroupMenuId.INTERNALS)
+developer_pages.addClickableMenu(
+    developer_pages.ClickableMenuId.CONNECTORS_INTERNALS, 'Connectors',
+    developer_pages.GroupMenuId.INTERNALS)
+developer_pages.addClickableMenu(
+    developer_pages.ClickableMenuId.DATA_SHARING_INTERNALS, 'Data Sharing',
+    developer_pages.GroupMenuId.INTERNALS)
+developer_pages.addClickableMenu(
+    developer_pages.ClickableMenuId.DOWNLOAD_INTERNALS, 'Download',
+    developer_pages.GroupMenuId.INTERNALS)
+developer_pages.addClickableMenu(
+    developer_pages.ClickableMenuId.EXTENSIONS_INTERNALS, 'Extensions',
+    developer_pages.GroupMenuId.INTERNALS)
+developer_pages.addClickableMenu(
+    developer_pages.ClickableMenuId.FAMILY_LINK_USER_INTERNALS,
+    'Family Link User', developer_pages.GroupMenuId.INTERNALS)
+developer_pages.addClickableMenu(
+    developer_pages.ClickableMenuId.GCM_INTERNALS, 'GCM',
+    developer_pages.GroupMenuId.INTERNALS)
+developer_pages.addClickableMenu(
+    developer_pages.ClickableMenuId.GPU, 'GPU',
+    developer_pages.GroupMenuId.INTERNALS)
+developer_pages.addClickableMenu(
+    developer_pages.ClickableMenuId.INDEXEDDB_INTERNALS, 'IndexedDB',
+    developer_pages.GroupMenuId.INTERNALS)
+developer_pages.addClickableMenu(
+    developer_pages.ClickableMenuId.TRACES_INTERNALS, 'Local Traces',
+    developer_pages.GroupMenuId.INTERNALS)
+developer_pages.addClickableMenu(
+    developer_pages.ClickableMenuId.LOCATION_INTERNALS, 'Location',
+    developer_pages.GroupMenuId.INTERNALS)
+developer_pages.addGroupMenu(
+    developer_pages.GroupMenuId.MEDIA, 'Media',
+    developer_pages.GroupMenuId.INTERNALS)
+developer_pages.addClickableMenu(
+    developer_pages.ClickableMenuId.MEDIA_INTERNALS, 'View',
+    developer_pages.GroupMenuId.MEDIA)
+developer_pages.addClickableMenu(
+    developer_pages.ClickableMenuId.MEDIA_ROUTER_INTERNALS, 'Router',
+    developer_pages.GroupMenuId.MEDIA)
+developer_pages.addClickableMenu(
+    developer_pages.ClickableMenuId.MEMORY_INTERNALS, 'Memory',
+    developer_pages.GroupMenuId.INTERNALS)
+developer_pages.addClickableMenu(
+    developer_pages.ClickableMenuId.METRICS_INTERNALS, 'Metrics',
+    developer_pages.GroupMenuId.INTERNALS)
+developer_pages.addClickableMenu(
+    developer_pages.ClickableMenuId.NET_INTERNALS, 'Net',
+    developer_pages.GroupMenuId.INTERNALS)
+developer_pages.addClickableMenu(
+    developer_pages.ClickableMenuId.NTP_TILES_INTERNALS, 'NTP Tiles',
+    developer_pages.GroupMenuId.INTERNALS)
+developer_pages.addGroupMenu(
+    developer_pages.GroupMenuId.ON_DEVICE, 'On Device',
+    developer_pages.GroupMenuId.INTERNALS)
+developer_pages.addClickableMenu(
+    developer_pages.ClickableMenuId.ON_DEVICE_INTERNALS, 'View',
+    developer_pages.GroupMenuId.ON_DEVICE)
+developer_pages.addClickableMenu(
+    developer_pages.ClickableMenuId.ON_DEVICE_TRANSLATION_INTERNALS,
+    'Translation', developer_pages.GroupMenuId.ON_DEVICE)
+developer_pages.addClickableMenu(
+    developer_pages.ClickableMenuId.OPTIMIZATION_GUIDE_INTERNALS,
+    'Optimization Guide', developer_pages.GroupMenuId.INTERNALS)
+developer_pages.addClickableMenu(
+    developer_pages.ClickableMenuId.PASSWORD_MANAGER_INTERNALS,
+    'Password Manager', developer_pages.GroupMenuId.INTERNALS)
+developer_pages.addClickableMenu(
+    developer_pages.ClickableMenuId.PREFERENCES_INTERNALS, 'Preferences',
+    developer_pages.GroupMenuId.INTERNALS)
+developer_pages.addClickableMenu(
+    developer_pages.ClickableMenuId.PRIVATE_AGGREGATION_INTERNALS,
+    'Private Aggregation', developer_pages.GroupMenuId.INTERNALS)
+developer_pages.addClickableMenu(
+    developer_pages.ClickableMenuId.PROCESS_INTERNALS, 'Process',
+    developer_pages.GroupMenuId.INTERNALS)
+developer_pages.addClickableMenu(
+    developer_pages.ClickableMenuId.QUOTA_INTERNALS, 'Quota',
+    developer_pages.GroupMenuId.INTERNALS)
+developer_pages.addClickableMenu(
+    developer_pages.ClickableMenuId.SEGMENTATION_INTERNALS, 'Segmentation',
+    developer_pages.GroupMenuId.INTERNALS)
+developer_pages.addClickableMenu(
+    developer_pages.ClickableMenuId.SERVICEWORKER_INTERNALS, 'Service Worker',
+    developer_pages.GroupMenuId.INTERNALS)
+developer_pages.addClickableMenu(
+    developer_pages.ClickableMenuId.SESSION_SERVICE, 'Session Service',
+    developer_pages.GroupMenuId.INTERNALS)
+developer_pages.addClickableMenu(
+    developer_pages.ClickableMenuId.SIGNIN_INTERNALS, 'Signin',
+    developer_pages.GroupMenuId.INTERNALS)
+developer_pages.addClickableMenu(
+    developer_pages.ClickableMenuId.SYNC_INTERNALS, 'Sync',
+    developer_pages.GroupMenuId.INTERNALS)
+developer_pages.addClickableMenu(
+    developer_pages.ClickableMenuId.TOPICS_INTERNALS, 'Topics',
+    developer_pages.GroupMenuId.INTERNALS)
+developer_pages.addClickableMenu(
+    developer_pages.ClickableMenuId.TRANSLATE_INTERNALS, 'Translate',
+    developer_pages.GroupMenuId.INTERNALS)
+developer_pages.addClickableMenu(
+    developer_pages.ClickableMenuId.USB_INTERNALS, 'USB',
+    developer_pages.GroupMenuId.INTERNALS)
+developer_pages.addClickableMenu(
+    developer_pages.ClickableMenuId.USER_EDUCATION_INTERNALS, 'User Education',
+    developer_pages.GroupMenuId.INTERNALS)
+developer_pages.addClickableMenu(
+    developer_pages.ClickableMenuId.WEB_APP_INTERNALS, 'Web App',
+    developer_pages.GroupMenuId.INTERNALS)
+developer_pages.addClickableMenu(
+    developer_pages.ClickableMenuId.WEBRTC_INTERNALS, 'WebRTC',
+    developer_pages.GroupMenuId.INTERNALS)
+
+
+developer_pages.addGroupMenu(
     developer_pages.GroupMenuId.REFERENCE, 'Reference',
     developer_pages.GroupMenuId.BROWSER_LINKS)
 developer_pages.addClickableMenu(
@@ -280,7 +458,8 @@ developer_pages.addClickableMenu(
 developer_pages.addClickableMenu(
     developer_pages.ClickableMenuId.WEBUI_GALLERY, 'WebUI Gallery',
     developer_pages.GroupMenuId.REFERENCE)
-developer_pages.addMenuGroup(
+
+developer_pages.addGroupMenu(
     developer_pages.GroupMenuId.SETTINGS, 'Settings',
     developer_pages.GroupMenuId.BROWSER_LINKS)
 developer_pages.addClickableMenu(
