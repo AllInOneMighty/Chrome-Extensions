@@ -110,6 +110,52 @@ namespace developer_pages {
   }
 
   export const MENU_ID_TO_URL: Record<ClickableMenuId, string> = {
+    /*
+    Accessibility
+    App Service
+    Attribution
+    Autofill
+    Blob
+    Bluetooth
+    Commerce
+    Connectors
+    Data Sharing
+    Download
+    Extensions
+    Family Link User
+    GCM
+    GPU
+    IndexedDB
+    Location
+    Media
+        View
+        Router
+    Memory
+    Metrics
+    Net
+    NTP Tiles
+    On Device
+        View
+        Translation
+    Optimization Guide
+    Password Manager
+    Preferences
+    Private Aggregation
+    Process
+    Quota
+    Segmentation
+    Service Worker
+    Session Service
+    Signin
+    Sync
+    Topics
+    Local Traces
+    Translate
+    USB
+    User Education
+    Web App
+    WebRTC
+    */
     [ClickableMenuId.ABOUT]: 'about:help',
     [ClickableMenuId.ALL_PAGES]: 'about:chrome-urls',
     [ClickableMenuId.APP_SERVICE_INTERNAL]: 'about:app-service-internals',
