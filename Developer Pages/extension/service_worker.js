@@ -6,9 +6,7 @@ var developer_pages;
     const SEPARATOR_PREFIX = 'separator:';
     let ClickableMenuId;
     (function (ClickableMenuId) {
-        ClickableMenuId["ABOUT"] = "about";
         ClickableMenuId["ACCESSIBILITY"] = "accessibility";
-        ClickableMenuId["ALL_PAGES"] = "all-pages";
         ClickableMenuId["APP_SERVICE_INTERNAL"] = "app-service-internals";
         ClickableMenuId["APPS"] = "apps";
         ClickableMenuId["ATTRIBUTION_INTERNALS"] = "attribution-internals";
@@ -17,6 +15,7 @@ var developer_pages;
         ClickableMenuId["BLUETOOTH_INTERNALS"] = "bluetooth-internals";
         ClickableMenuId["BOOKMARKS"] = "bookmarks";
         ClickableMenuId["BOOKMARKS_SIDE_PANEL"] = "bookmarks-side-panel";
+        ClickableMenuId["CHROME_URLS"] = "chrome-urls";
         ClickableMenuId["COMMERCE_INTERNALS"] = "commerce-internals";
         ClickableMenuId["COMPONENTS"] = "components";
         ClickableMenuId["CONNECTORS_INTERNALS"] = "connectors-internals";
@@ -24,7 +23,7 @@ var developer_pages;
         ClickableMenuId["CREDITS"] = "credits";
         ClickableMenuId["DATA_SHARING_INTERNALS"] = "data-sharing-internals";
         ClickableMenuId["DEVICE_LOG"] = "device-log";
-        ClickableMenuId["DEVTOOLS"] = "insepct";
+        ClickableMenuId["INSPECT"] = "insepct";
         ClickableMenuId["DINO"] = "dino";
         ClickableMenuId["DISCARDS"] = "discards";
         ClickableMenuId["DOWNLOAD_INTERNALS"] = "download-internals";
@@ -35,6 +34,7 @@ var developer_pages;
         ClickableMenuId["FLAGS"] = "flags";
         ClickableMenuId["GCM_INTERNALS"] = "gcm-internals";
         ClickableMenuId["GPU"] = "gpu";
+        ClickableMenuId["HELP"] = "help";
         ClickableMenuId["HISTOGRAMS"] = "histograms";
         ClickableMenuId["HISTORY_CLUSTERS"] = "history-clusters";
         ClickableMenuId["HISTORY_VIEW"] = "history-view";
@@ -94,52 +94,92 @@ var developer_pages;
         ClickableMenuId["WEBUI_JAVASCRIPT_ERROR"] = "webui-javascript-error";
     })(ClickableMenuId = developer_pages.ClickableMenuId || (developer_pages.ClickableMenuId = {}));
     developer_pages.MENU_ID_TO_URL = {
-        [ClickableMenuId.ABOUT]: 'about:help',
-        [ClickableMenuId.ALL_PAGES]: 'about:chrome-urls',
-        [ClickableMenuId.APP_SERVICE_INTERNAL]: 'about:app-service-internals',
-        [ClickableMenuId.APPS]: 'about:apps',
-        [ClickableMenuId.ATTRIBUTION_INTERNALS]: 'about:attribution-internals',
-        [ClickableMenuId.BOOKMARKS]: 'about:bookmarks',
-        [ClickableMenuId.BOOKMARKS_SIDE_PANEL]: 'about:bookmarks-side-panel.top-chrome',
-        [ClickableMenuId.COMPONENTS]: 'about:components',
-        [ClickableMenuId.CRASHES]: 'about:crashes',
-        [ClickableMenuId.CREDITS]: 'about:credits',
-        [ClickableMenuId.DEVICE_LOG]: 'about:device-log',
-        [ClickableMenuId.DINO]: 'about:dino',
-        [ClickableMenuId.DISCARDS]: 'about:discards',
-        [ClickableMenuId.DOWNLOADS]: 'about:downloads',
-        [ClickableMenuId.EXTENSIONS]: 'about:extensions',
-        [ClickableMenuId.FLAGS]: 'about:flags',
-        [ClickableMenuId.HISTOGRAMS]: 'about:histograms',
-        [ClickableMenuId.HISTORY_CLUSTERS]: 'about:history-clusters-side-panel.top-chrome',
-        [ClickableMenuId.HISTORY_VIEW]: 'about:history',
-        [ClickableMenuId.DEVTOOLS]: 'about:inspect',
-        [ClickableMenuId.INTERSTITIALS]: 'about:interstitials',
-        [ClickableMenuId.LINUX_PROXY_CONFIG]: 'about:linux-proxy-config',
-        [ClickableMenuId.LOCAL_STATE]: 'about:local-state',
-        [ClickableMenuId.MANAGEMENT]: 'about:management',
-        [ClickableMenuId.MEDIA_ENGAGEMENT]: 'about:media-engagement',
-        [ClickableMenuId.NETWORK_ERRORS]: 'about:network-errors',
-        [ClickableMenuId.NETWORK_LOG_EXPORT]: 'about:net-export',
-        [ClickableMenuId.OMNIBOX]: 'about:omnibox',
-        [ClickableMenuId.PASSWORD_MANAGER]: 'about:password-manager',
-        [ClickableMenuId.POLICIES]: 'about:policy',
-        [ClickableMenuId.PREDICTORS]: 'about:predictors',
-        [ClickableMenuId.PROFILES]: 'about:profile-internals',
-        [ClickableMenuId.READING_LIST]: 'about:read-later.top-chrome',
-        [ClickableMenuId.SAFE_BROWSING]: 'about:safe-browsing',
-        [ClickableMenuId.SANDBOX_STATUS]: 'about:sandbox',
-        [ClickableMenuId.SETTINGS]: 'about:settings',
-        [ClickableMenuId.SITE_ENGAGEMENT]: 'about:site-engagement',
-        [ClickableMenuId.SYSTEM]: 'about:system',
-        [ClickableMenuId.TERMS]: 'about:terms',
-        [ClickableMenuId.TRACING]: 'about:tracing',
-        [ClickableMenuId.UKM]: 'about:ukm',
-        [ClickableMenuId.USER_ACTIONS]: 'about:user-actions',
-        [ClickableMenuId.VERSION]: 'about:version',
-        [ClickableMenuId.WEBRTC_LOGS]: 'about:webrtc-logs',
-        [ClickableMenuId.WEBUI_GALLERY]: 'about:webui-gallery',
-        [ClickableMenuId.WEBUI_JAVASCRIPT_ERROR]: 'about:webuijserror',
+        [ClickableMenuId.ACCESSIBILITY]: 'chrome://accessibility',
+        [ClickableMenuId.APP_SERVICE_INTERNAL]: 'chrome://app-service-internals',
+        [ClickableMenuId.APPS]: 'chrome://apps',
+        [ClickableMenuId.ATTRIBUTION_INTERNALS]: 'chrome://attribution-internals',
+        [ClickableMenuId.AUTOFILL_INTERNALS]: 'chrome://autofill-internals',
+        [ClickableMenuId.BLOB_INTERNALS]: 'chrome://blob-internals',
+        [ClickableMenuId.BLUETOOTH_INTERNALS]: 'chrome://bluetooth-internals',
+        [ClickableMenuId.BOOKMARKS]: 'chrome://bookmarks',
+        [ClickableMenuId.BOOKMARKS_SIDE_PANEL]: 'chrome://bookmarks-side-panel.top-chrome',
+        [ClickableMenuId.CHROME_URLS]: 'chrome://chrome-urls',
+        [ClickableMenuId.COMMERCE_INTERNALS]: 'chrome://commerce-internals',
+        [ClickableMenuId.COMPONENTS]: 'chrome://components',
+        [ClickableMenuId.CONNECTORS_INTERNALS]: 'chrome://connectors-internals',
+        [ClickableMenuId.CRASHES]: 'chrome://crashes',
+        [ClickableMenuId.CREDITS]: 'chrome://credits',
+        [ClickableMenuId.DATA_SHARING_INTERNALS]: 'chrome://data-sharing-internals',
+        [ClickableMenuId.DEVICE_LOG]: 'chrome://device-log',
+        [ClickableMenuId.DINO]: 'chrome://dino',
+        [ClickableMenuId.DISCARDS]: 'chrome://discards',
+        [ClickableMenuId.DOWNLOAD_INTERNALS]: 'chrome://download-internals',
+        [ClickableMenuId.DOWNLOADS]: 'chrome://downloads',
+        [ClickableMenuId.EXTENSIONS]: 'chrome://extensions',
+        [ClickableMenuId.EXTENSIONS_INTERNALS]: 'chrome://extensions-internals',
+        [ClickableMenuId.FAMILY_LINK_USER_INTERNALS]: 'chrome://family-link-user-internals',
+        [ClickableMenuId.FLAGS]: 'chrome://flags',
+        [ClickableMenuId.GCM_INTERNALS]: 'chrome://gcm-internals',
+        [ClickableMenuId.GPU]: 'chrome://gpu',
+        [ClickableMenuId.HELP]: 'chrome://help',
+        [ClickableMenuId.HISTOGRAMS]: 'chrome://histograms',
+        [ClickableMenuId.HISTORY_CLUSTERS]: 'chrome://history-clusters-side-panel.top-chrome',
+        [ClickableMenuId.HISTORY_VIEW]: 'chrome://history',
+        [ClickableMenuId.INDEXEDDB_INTERNALS]: 'chrome://indexeddb-internals',
+        [ClickableMenuId.INSPECT]: 'chrome://inspect',
+        [ClickableMenuId.INTERSTITIALS]: 'chrome://interstitials',
+        [ClickableMenuId.LINUX_PROXY_CONFIG]: 'chrome://linux-proxy-config',
+        [ClickableMenuId.LOCAL_STATE]: 'chrome://local-state',
+        [ClickableMenuId.LOCATION_INTERNALS]: 'chrome://location-internals',
+        [ClickableMenuId.MANAGEMENT]: 'chrome://management',
+        [ClickableMenuId.MEDIA_ENGAGEMENT]: 'chrome://media-engagement',
+        [ClickableMenuId.MEDIA_INTERNALS]: 'chrome://media-internals',
+        [ClickableMenuId.MEDIA_ROUTER_INTERNALS]: 'chrome://media-router-internals',
+        [ClickableMenuId.MEMORY_INTERNALS]: 'chrome://memory-internals',
+        [ClickableMenuId.METRICS_INTERNALS]: 'chrome://metrics-internals',
+        [ClickableMenuId.NET_INTERNALS]: 'chrome://net-internals',
+        [ClickableMenuId.NETWORK_ERRORS]: 'chrome://network-errors',
+        [ClickableMenuId.NETWORK_LOG_EXPORT]: 'chrome://net-export',
+        [ClickableMenuId.NTP_TILES_INTERNALS]: 'chrome://ntp-tiles-internals',
+        [ClickableMenuId.OMNIBOX]: 'chrome://omnibox',
+        [ClickableMenuId.ON_DEVICE_INTERNALS]: 'chrome://on-device-internals',
+        [ClickableMenuId.ON_DEVICE_TRANSLATION_INTERNALS]: 'chrome://on-device-translation-internals',
+        [ClickableMenuId.OPTIMIZATION_GUIDE_INTERNALS]: 'chrome://optimization-guide-internals',
+        [ClickableMenuId.PASSWORD_MANAGER]: 'chrome://password-manager',
+        [ClickableMenuId.PASSWORD_MANAGER_INTERNALS]: 'chrome://password-manager-internals',
+        [ClickableMenuId.POLICIES]: 'chrome://policy',
+        [ClickableMenuId.PREDICTORS]: 'chrome://predictors',
+        [ClickableMenuId.PREFERENCES_INTERNALS]: 'chrome://prefs-internals',
+        [ClickableMenuId.PRIVATE_AGGREGATION_INTERNALS]: 'chrome://private-aggregation-internals',
+        [ClickableMenuId.PROCESS_INTERNALS]: 'chrome://process-internals',
+        [ClickableMenuId.PROFILES]: 'chrome://profile-internals',
+        [ClickableMenuId.QUOTA_INTERNALS]: 'chrome://quota-internals',
+        [ClickableMenuId.READING_LIST]: 'chrome://read-later.top-chrome',
+        [ClickableMenuId.SAFE_BROWSING]: 'chrome://safe-browsing',
+        [ClickableMenuId.SANDBOX_STATUS]: 'chrome://sandbox',
+        [ClickableMenuId.SEGMENTATION_INTERNALS]: 'chrome://segmentation-internals',
+        [ClickableMenuId.SERVICEWORKER_INTERNALS]: 'chrome://serviceworker-internals',
+        [ClickableMenuId.SESSION_SERVICE]: 'chrome://internals/session-service',
+        [ClickableMenuId.SETTINGS]: 'chrome://settings',
+        [ClickableMenuId.SIGNIN_INTERNALS]: 'chrome://signin-internals',
+        [ClickableMenuId.SITE_ENGAGEMENT]: 'chrome://site-engagement',
+        [ClickableMenuId.SYNC_INTERNALS]: 'chrome://sync-internals',
+        [ClickableMenuId.SYSTEM]: 'chrome://system',
+        [ClickableMenuId.TERMS]: 'chrome://terms',
+        [ClickableMenuId.TOPICS_INTERNALS]: 'chrome://topics-internals',
+        [ClickableMenuId.TRACES_INTERNALS]: 'chrome://traces-internals',
+        [ClickableMenuId.TRACING]: 'chrome://tracing',
+        [ClickableMenuId.TRANSLATE_INTERNALS]: 'chrome://translate-internals',
+        [ClickableMenuId.UKM]: 'chrome://ukm',
+        [ClickableMenuId.USB_INTERNALS]: 'chrome://usb-internals',
+        [ClickableMenuId.USER_ACTIONS]: 'chrome://user-actions',
+        [ClickableMenuId.USER_EDUCATION_INTERNALS]: 'chrome://user-education-internals',
+        [ClickableMenuId.VERSION]: 'chrome://version',
+        [ClickableMenuId.WEB_APP_INTERNALS]: 'chrome://web-app-internals',
+        [ClickableMenuId.WEBRTC_INTERNALS]: 'chrome://webrtc-internals',
+        [ClickableMenuId.WEBRTC_LOGS]: 'chrome://webrtc-logs',
+        [ClickableMenuId.WEBUI_GALLERY]: 'chrome://webui-gallery',
+        [ClickableMenuId.WEBUI_JAVASCRIPT_ERROR]: 'chrome://webuijserror',
     };
     let nextSeparatorId = 1;
     function addGroupMenu(id, title, parentId) {
@@ -170,6 +210,7 @@ var developer_pages;
     }
     developer_pages.addSeparator = addSeparator;
     function openUrl(url) {
+        console.log('Opening url: ' + url);
         chrome.tabs.create({ 'url': url });
     }
     developer_pages.openUrl = openUrl;
@@ -178,7 +219,7 @@ developer_pages.addGroupMenu("browser-links", 'Browser Links');
 developer_pages.addClickableMenu(developer_pages.ClickableMenuId.APPS, '📱 Apps', "browser-links");
 developer_pages.addClickableMenu(developer_pages.ClickableMenuId.BOOKMARKS, '📑 Bookmarks', "browser-links");
 developer_pages.addClickableMenu(developer_pages.ClickableMenuId.CRASHES, '💥 Crashes', "browser-links");
-developer_pages.addClickableMenu(developer_pages.ClickableMenuId.DEVTOOLS, '🔍 DevTools', "browser-links");
+developer_pages.addClickableMenu(developer_pages.ClickableMenuId.INSPECT, '🔍 DevTools', "browser-links");
 developer_pages.addClickableMenu(developer_pages.ClickableMenuId.DOWNLOADS, '💾 Downloads', "browser-links");
 developer_pages.addClickableMenu(developer_pages.ClickableMenuId.EXTENSIONS, '🧩 Extensions', "browser-links");
 developer_pages.addClickableMenu(developer_pages.ClickableMenuId.FLAGS, '🚩 Flags', "browser-links");
@@ -265,12 +306,12 @@ developer_pages.addClickableMenu(developer_pages.ClickableMenuId.MANAGEMENT, 'Ma
 developer_pages.addClickableMenu(developer_pages.ClickableMenuId.PROFILES, 'Profiles', "settings");
 developer_pages.addClickableMenu(developer_pages.ClickableMenuId.LINUX_PROXY_CONFIG, 'Proxy Configuration', "settings");
 developer_pages.addSeparator("browser-links");
-developer_pages.addClickableMenu(developer_pages.ClickableMenuId.ABOUT, 'About', "browser-links");
+developer_pages.addClickableMenu(developer_pages.ClickableMenuId.HELP, 'About', "browser-links");
 developer_pages.addClickableMenu(developer_pages.ClickableMenuId.CREDITS, 'Credits', "browser-links");
 developer_pages.addClickableMenu(developer_pages.ClickableMenuId.TERMS, 'Terms', "browser-links");
 developer_pages.addClickableMenu(developer_pages.ClickableMenuId.VERSION, 'Version', "browser-links");
 developer_pages.addSeparator("browser-links");
-developer_pages.addClickableMenu(developer_pages.ClickableMenuId.ALL_PAGES, 'All pages', "browser-links");
+developer_pages.addClickableMenu(developer_pages.ClickableMenuId.CHROME_URLS, 'All pages', "browser-links");
 chrome.contextMenus.onClicked.addListener((info, _tab) => {
     const menuItemId = info.menuItemId;
     if (menuItemId.startsWith(developer_pages.CLICKABLE_PREFIX)) {
