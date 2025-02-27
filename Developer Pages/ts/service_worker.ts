@@ -244,303 +244,305 @@ namespace developer_pages {
   }
 }  // namespace developer_pages
 
-developer_pages.addGroupMenu(
-    developer_pages.GroupMenuId.BROWSER_LINKS, 'Browser Links');
+chrome.runtime.onInstalled.addListener(
+    (_details: chrome.runtime.InstalledDetails) => {
+      developer_pages.addGroupMenu(
+          developer_pages.GroupMenuId.BROWSER_LINKS, 'Browser Links');
 
-developer_pages.addClickableMenu(
-    developer_pages.ClickableMenuId.APPS, '📱 Apps',
-    developer_pages.GroupMenuId.BROWSER_LINKS)
-developer_pages.addClickableMenu(
-    developer_pages.ClickableMenuId.BOOKMARKS, '📑 Bookmarks',
-    developer_pages.GroupMenuId.BROWSER_LINKS)
-developer_pages.addClickableMenu(
-    developer_pages.ClickableMenuId.CRASHES, '💥 Crashes',
-    developer_pages.GroupMenuId.BROWSER_LINKS)
-developer_pages.addClickableMenu(
-    developer_pages.ClickableMenuId.INSPECT, '🔍 DevTools',
-    developer_pages.GroupMenuId.BROWSER_LINKS)
-developer_pages.addClickableMenu(
-    developer_pages.ClickableMenuId.DOWNLOADS, '💾 Downloads',
-    developer_pages.GroupMenuId.BROWSER_LINKS)
-developer_pages.addClickableMenu(
-    developer_pages.ClickableMenuId.EXTENSIONS, '🧩 Extensions',
-    developer_pages.GroupMenuId.BROWSER_LINKS)
-developer_pages.addClickableMenu(
-    developer_pages.ClickableMenuId.FLAGS, '🚩 Flags',
-    developer_pages.GroupMenuId.BROWSER_LINKS)
-developer_pages.addGroupMenu(
-    developer_pages.GroupMenuId.HISTORY, '🕑 History',
-    developer_pages.GroupMenuId.BROWSER_LINKS)
-developer_pages.addClickableMenu(
-    developer_pages.ClickableMenuId.HISTORY_VIEW, 'View',
-    developer_pages.GroupMenuId.HISTORY)
-developer_pages.addClickableMenu(
-    developer_pages.ClickableMenuId.HISTORY_CLUSTERS, 'Clusters',
-    developer_pages.GroupMenuId.HISTORY)
-developer_pages.addClickableMenu(
-    developer_pages.ClickableMenuId.PASSWORD_MANAGER, '🔐 Password Manager',
-    developer_pages.GroupMenuId.BROWSER_LINKS)
-developer_pages.addClickableMenu(
-    developer_pages.ClickableMenuId.READING_LIST, '📖 Reading List',
-    developer_pages.GroupMenuId.BROWSER_LINKS)
-developer_pages.addClickableMenu(
-    developer_pages.ClickableMenuId.SETTINGS, '⚙ Settings',
-    developer_pages.GroupMenuId.BROWSER_LINKS)
-developer_pages.addClickableMenu(
-    developer_pages.ClickableMenuId.SITE_ENGAGEMENT, '📊 Site Engagement',
-    developer_pages.GroupMenuId.BROWSER_LINKS)
+      developer_pages.addClickableMenu(
+          developer_pages.ClickableMenuId.APPS, '📱 Apps',
+          developer_pages.GroupMenuId.BROWSER_LINKS)
+      developer_pages.addClickableMenu(
+          developer_pages.ClickableMenuId.BOOKMARKS, '📑 Bookmarks',
+          developer_pages.GroupMenuId.BROWSER_LINKS)
+      developer_pages.addClickableMenu(
+          developer_pages.ClickableMenuId.CRASHES, '💥 Crashes',
+          developer_pages.GroupMenuId.BROWSER_LINKS)
+      developer_pages.addClickableMenu(
+          developer_pages.ClickableMenuId.INSPECT, '🔍 DevTools',
+          developer_pages.GroupMenuId.BROWSER_LINKS)
+      developer_pages.addClickableMenu(
+          developer_pages.ClickableMenuId.DOWNLOADS, '💾 Downloads',
+          developer_pages.GroupMenuId.BROWSER_LINKS)
+      developer_pages.addClickableMenu(
+          developer_pages.ClickableMenuId.EXTENSIONS, '🧩 Extensions',
+          developer_pages.GroupMenuId.BROWSER_LINKS)
+      developer_pages.addClickableMenu(
+          developer_pages.ClickableMenuId.FLAGS, '🚩 Flags',
+          developer_pages.GroupMenuId.BROWSER_LINKS)
+      developer_pages.addGroupMenu(
+          developer_pages.GroupMenuId.HISTORY, '🕑 History',
+          developer_pages.GroupMenuId.BROWSER_LINKS)
+      developer_pages.addClickableMenu(
+          developer_pages.ClickableMenuId.HISTORY_VIEW, 'View',
+          developer_pages.GroupMenuId.HISTORY)
+      developer_pages.addClickableMenu(
+          developer_pages.ClickableMenuId.HISTORY_CLUSTERS, 'Clusters',
+          developer_pages.GroupMenuId.HISTORY)
+      developer_pages.addClickableMenu(
+          developer_pages.ClickableMenuId.PASSWORD_MANAGER,
+          '🔐 Password Manager', developer_pages.GroupMenuId.BROWSER_LINKS)
+      developer_pages.addClickableMenu(
+          developer_pages.ClickableMenuId.READING_LIST, '📖 Reading List',
+          developer_pages.GroupMenuId.BROWSER_LINKS)
+      developer_pages.addClickableMenu(
+          developer_pages.ClickableMenuId.SETTINGS, '🛠️ Settings',
+          developer_pages.GroupMenuId.BROWSER_LINKS)
+      developer_pages.addClickableMenu(
+          developer_pages.ClickableMenuId.SITE_ENGAGEMENT, '📊 Site Engagement',
+          developer_pages.GroupMenuId.BROWSER_LINKS)
 
-developer_pages.addSeparator(developer_pages.GroupMenuId.BROWSER_LINKS);
+      developer_pages.addSeparator(developer_pages.GroupMenuId.BROWSER_LINKS);
 
-developer_pages.addGroupMenu(
-    developer_pages.GroupMenuId.DEBUG, 'Debug',
-    developer_pages.GroupMenuId.BROWSER_LINKS)
-developer_pages.addClickableMenu(
-    developer_pages.ClickableMenuId.COMPONENTS, 'Components',
-    developer_pages.GroupMenuId.DEBUG)
-developer_pages.addClickableMenu(
-    developer_pages.ClickableMenuId.DEVICE_LOG, 'Device Log',
-    developer_pages.GroupMenuId.DEBUG)
-developer_pages.addClickableMenu(
-    developer_pages.ClickableMenuId.DISCARDS, 'Discards',
-    developer_pages.GroupMenuId.DEBUG)
-developer_pages.addClickableMenu(
-    developer_pages.ClickableMenuId.HISTOGRAMS, 'Histograms',
-    developer_pages.GroupMenuId.DEBUG)
-developer_pages.addClickableMenu(
-    developer_pages.ClickableMenuId.LOCAL_STATE, 'Local State',
-    developer_pages.GroupMenuId.DEBUG)
-developer_pages.addClickableMenu(
-    developer_pages.ClickableMenuId.MEDIA_ENGAGEMENT, 'Media Engagement',
-    developer_pages.GroupMenuId.DEBUG)
-developer_pages.addClickableMenu(
-    developer_pages.ClickableMenuId.NETWORK_LOG_EXPORT, 'Network Log Export',
-    developer_pages.GroupMenuId.DEBUG)
-developer_pages.addClickableMenu(
-    developer_pages.ClickableMenuId.OMNIBOX, 'Omnibox',
-    developer_pages.GroupMenuId.DEBUG)
-developer_pages.addClickableMenu(
-    developer_pages.ClickableMenuId.POLICIES, 'Policies',
-    developer_pages.GroupMenuId.DEBUG)
-developer_pages.addClickableMenu(
-    developer_pages.ClickableMenuId.PREDICTORS, 'Predictors',
-    developer_pages.GroupMenuId.DEBUG)
-developer_pages.addClickableMenu(
-    developer_pages.ClickableMenuId.SAFE_BROWSING, 'Safe Browsing',
-    developer_pages.GroupMenuId.DEBUG)
-developer_pages.addClickableMenu(
-    developer_pages.ClickableMenuId.SANDBOX_STATUS, 'Sandbox Status',
-    developer_pages.GroupMenuId.DEBUG)
-developer_pages.addClickableMenu(
-    developer_pages.ClickableMenuId.SYSTEM, 'System',
-    developer_pages.GroupMenuId.DEBUG)
-developer_pages.addClickableMenu(
-    developer_pages.ClickableMenuId.TRACING, 'Tracing',
-    developer_pages.GroupMenuId.DEBUG)
-developer_pages.addClickableMenu(
-    developer_pages.ClickableMenuId.UKM, 'UKM',
-    developer_pages.GroupMenuId.DEBUG)
-developer_pages.addClickableMenu(
-    developer_pages.ClickableMenuId.USER_ACTIONS, 'User Actions',
-    developer_pages.GroupMenuId.DEBUG)
-developer_pages.addClickableMenu(
-    developer_pages.ClickableMenuId.WEBRTC_LOGS, 'WebRTC Logs',
-    developer_pages.GroupMenuId.DEBUG)
-developer_pages.addClickableMenu(
-    developer_pages.ClickableMenuId.WEBUI_JAVASCRIPT_ERROR,
-    'WebUI JavaScript Error', developer_pages.GroupMenuId.DEBUG)
+      developer_pages.addGroupMenu(
+          developer_pages.GroupMenuId.DEBUG, 'Debug',
+          developer_pages.GroupMenuId.BROWSER_LINKS)
+      developer_pages.addClickableMenu(
+          developer_pages.ClickableMenuId.COMPONENTS, 'Components',
+          developer_pages.GroupMenuId.DEBUG)
+      developer_pages.addClickableMenu(
+          developer_pages.ClickableMenuId.DEVICE_LOG, 'Device Log',
+          developer_pages.GroupMenuId.DEBUG)
+      developer_pages.addClickableMenu(
+          developer_pages.ClickableMenuId.DISCARDS, 'Discards',
+          developer_pages.GroupMenuId.DEBUG)
+      developer_pages.addClickableMenu(
+          developer_pages.ClickableMenuId.HISTOGRAMS, 'Histograms',
+          developer_pages.GroupMenuId.DEBUG)
+      developer_pages.addClickableMenu(
+          developer_pages.ClickableMenuId.LOCAL_STATE, 'Local State',
+          developer_pages.GroupMenuId.DEBUG)
+      developer_pages.addClickableMenu(
+          developer_pages.ClickableMenuId.MEDIA_ENGAGEMENT, 'Media Engagement',
+          developer_pages.GroupMenuId.DEBUG)
+      developer_pages.addClickableMenu(
+          developer_pages.ClickableMenuId.NETWORK_LOG_EXPORT,
+          'Network Log Export', developer_pages.GroupMenuId.DEBUG)
+      developer_pages.addClickableMenu(
+          developer_pages.ClickableMenuId.OMNIBOX, 'Omnibox',
+          developer_pages.GroupMenuId.DEBUG)
+      developer_pages.addClickableMenu(
+          developer_pages.ClickableMenuId.POLICIES, 'Policies',
+          developer_pages.GroupMenuId.DEBUG)
+      developer_pages.addClickableMenu(
+          developer_pages.ClickableMenuId.PREDICTORS, 'Predictors',
+          developer_pages.GroupMenuId.DEBUG)
+      developer_pages.addClickableMenu(
+          developer_pages.ClickableMenuId.SAFE_BROWSING, 'Safe Browsing',
+          developer_pages.GroupMenuId.DEBUG)
+      developer_pages.addClickableMenu(
+          developer_pages.ClickableMenuId.SANDBOX_STATUS, 'Sandbox Status',
+          developer_pages.GroupMenuId.DEBUG)
+      developer_pages.addClickableMenu(
+          developer_pages.ClickableMenuId.SYSTEM, 'System',
+          developer_pages.GroupMenuId.DEBUG)
+      developer_pages.addClickableMenu(
+          developer_pages.ClickableMenuId.TRACING, 'Tracing',
+          developer_pages.GroupMenuId.DEBUG)
+      developer_pages.addClickableMenu(
+          developer_pages.ClickableMenuId.UKM, 'UKM',
+          developer_pages.GroupMenuId.DEBUG)
+      developer_pages.addClickableMenu(
+          developer_pages.ClickableMenuId.USER_ACTIONS, 'User Actions',
+          developer_pages.GroupMenuId.DEBUG)
+      developer_pages.addClickableMenu(
+          developer_pages.ClickableMenuId.WEBRTC_LOGS, 'WebRTC Logs',
+          developer_pages.GroupMenuId.DEBUG)
+      developer_pages.addClickableMenu(
+          developer_pages.ClickableMenuId.WEBUI_JAVASCRIPT_ERROR,
+          'WebUI JavaScript Error', developer_pages.GroupMenuId.DEBUG)
 
-developer_pages.addGroupMenu(
-    developer_pages.GroupMenuId.FUN, 'Fun',
-    developer_pages.GroupMenuId.BROWSER_LINKS)
-developer_pages.addClickableMenu(
-    developer_pages.ClickableMenuId.DINO, '🦖 Dino',
-    developer_pages.GroupMenuId.FUN)
+      developer_pages.addGroupMenu(
+          developer_pages.GroupMenuId.FUN, 'Fun',
+          developer_pages.GroupMenuId.BROWSER_LINKS)
+      developer_pages.addClickableMenu(
+          developer_pages.ClickableMenuId.DINO, '🦖 Dino',
+          developer_pages.GroupMenuId.FUN)
 
-developer_pages.addGroupMenu(
-    developer_pages.GroupMenuId.INTERNALS, 'Internals',
-    developer_pages.GroupMenuId.BROWSER_LINKS)
-developer_pages.addClickableMenu(
-    developer_pages.ClickableMenuId.ACCESSIBILITY, 'Accessibility',
-    developer_pages.GroupMenuId.INTERNALS)
-developer_pages.addClickableMenu(
-    developer_pages.ClickableMenuId.APP_SERVICE_INTERNAL, 'App Service',
-    developer_pages.GroupMenuId.INTERNALS)
-developer_pages.addClickableMenu(
-    developer_pages.ClickableMenuId.ATTRIBUTION_INTERNALS, 'Attribution',
-    developer_pages.GroupMenuId.INTERNALS)
-developer_pages.addClickableMenu(
-    developer_pages.ClickableMenuId.AUTOFILL_INTERNALS, 'Autofill',
-    developer_pages.GroupMenuId.INTERNALS)
-developer_pages.addClickableMenu(
-    developer_pages.ClickableMenuId.BLOB_INTERNALS, 'Blob',
-    developer_pages.GroupMenuId.INTERNALS)
-developer_pages.addClickableMenu(
-    developer_pages.ClickableMenuId.BLUETOOTH_INTERNALS, 'Bluetooth',
-    developer_pages.GroupMenuId.INTERNALS)
-developer_pages.addClickableMenu(
-    developer_pages.ClickableMenuId.COMMERCE_INTERNALS, 'Commerce',
-    developer_pages.GroupMenuId.INTERNALS)
-developer_pages.addClickableMenu(
-    developer_pages.ClickableMenuId.CONNECTORS_INTERNALS, 'Connectors',
-    developer_pages.GroupMenuId.INTERNALS)
-developer_pages.addClickableMenu(
-    developer_pages.ClickableMenuId.DATA_SHARING_INTERNALS, 'Data Sharing',
-    developer_pages.GroupMenuId.INTERNALS)
-developer_pages.addClickableMenu(
-    developer_pages.ClickableMenuId.DOWNLOAD_INTERNALS, 'Download',
-    developer_pages.GroupMenuId.INTERNALS)
-developer_pages.addClickableMenu(
-    developer_pages.ClickableMenuId.EXTENSIONS_INTERNALS, 'Extensions',
-    developer_pages.GroupMenuId.INTERNALS)
-developer_pages.addClickableMenu(
-    developer_pages.ClickableMenuId.FAMILY_LINK_USER_INTERNALS,
-    'Family Link User', developer_pages.GroupMenuId.INTERNALS)
-developer_pages.addClickableMenu(
-    developer_pages.ClickableMenuId.GCM_INTERNALS, 'GCM',
-    developer_pages.GroupMenuId.INTERNALS)
-developer_pages.addClickableMenu(
-    developer_pages.ClickableMenuId.GPU, 'GPU',
-    developer_pages.GroupMenuId.INTERNALS)
-developer_pages.addClickableMenu(
-    developer_pages.ClickableMenuId.INDEXEDDB_INTERNALS, 'IndexedDB',
-    developer_pages.GroupMenuId.INTERNALS)
-developer_pages.addClickableMenu(
-    developer_pages.ClickableMenuId.TRACES_INTERNALS, 'Local Traces',
-    developer_pages.GroupMenuId.INTERNALS)
-developer_pages.addClickableMenu(
-    developer_pages.ClickableMenuId.LOCATION_INTERNALS, 'Location',
-    developer_pages.GroupMenuId.INTERNALS)
-developer_pages.addGroupMenu(
-    developer_pages.GroupMenuId.MEDIA, 'Media',
-    developer_pages.GroupMenuId.INTERNALS)
-developer_pages.addClickableMenu(
-    developer_pages.ClickableMenuId.MEDIA_INTERNALS, 'View',
-    developer_pages.GroupMenuId.MEDIA)
-developer_pages.addClickableMenu(
-    developer_pages.ClickableMenuId.MEDIA_ROUTER_INTERNALS, 'Router',
-    developer_pages.GroupMenuId.MEDIA)
-developer_pages.addClickableMenu(
-    developer_pages.ClickableMenuId.MEMORY_INTERNALS, 'Memory',
-    developer_pages.GroupMenuId.INTERNALS)
-developer_pages.addClickableMenu(
-    developer_pages.ClickableMenuId.METRICS_INTERNALS, 'Metrics',
-    developer_pages.GroupMenuId.INTERNALS)
-developer_pages.addClickableMenu(
-    developer_pages.ClickableMenuId.NET_INTERNALS, 'Net',
-    developer_pages.GroupMenuId.INTERNALS)
-developer_pages.addClickableMenu(
-    developer_pages.ClickableMenuId.NTP_TILES_INTERNALS, 'NTP Tiles',
-    developer_pages.GroupMenuId.INTERNALS)
-developer_pages.addGroupMenu(
-    developer_pages.GroupMenuId.ON_DEVICE, 'On Device',
-    developer_pages.GroupMenuId.INTERNALS)
-developer_pages.addClickableMenu(
-    developer_pages.ClickableMenuId.ON_DEVICE_INTERNALS, 'View',
-    developer_pages.GroupMenuId.ON_DEVICE)
-developer_pages.addClickableMenu(
-    developer_pages.ClickableMenuId.ON_DEVICE_TRANSLATION_INTERNALS,
-    'Translation', developer_pages.GroupMenuId.ON_DEVICE)
-developer_pages.addClickableMenu(
-    developer_pages.ClickableMenuId.OPTIMIZATION_GUIDE_INTERNALS,
-    'Optimization Guide', developer_pages.GroupMenuId.INTERNALS)
-developer_pages.addClickableMenu(
-    developer_pages.ClickableMenuId.PASSWORD_MANAGER_INTERNALS,
-    'Password Manager', developer_pages.GroupMenuId.INTERNALS)
-developer_pages.addClickableMenu(
-    developer_pages.ClickableMenuId.PREFERENCES_INTERNALS, 'Preferences',
-    developer_pages.GroupMenuId.INTERNALS)
-developer_pages.addClickableMenu(
-    developer_pages.ClickableMenuId.PRIVATE_AGGREGATION_INTERNALS,
-    'Private Aggregation', developer_pages.GroupMenuId.INTERNALS)
-developer_pages.addClickableMenu(
-    developer_pages.ClickableMenuId.PROCESS_INTERNALS, 'Process',
-    developer_pages.GroupMenuId.INTERNALS)
-developer_pages.addClickableMenu(
-    developer_pages.ClickableMenuId.QUOTA_INTERNALS, 'Quota',
-    developer_pages.GroupMenuId.INTERNALS)
-developer_pages.addClickableMenu(
-    developer_pages.ClickableMenuId.SEGMENTATION_INTERNALS, 'Segmentation',
-    developer_pages.GroupMenuId.INTERNALS)
-developer_pages.addClickableMenu(
-    developer_pages.ClickableMenuId.SERVICEWORKER_INTERNALS, 'Service Worker',
-    developer_pages.GroupMenuId.INTERNALS)
-developer_pages.addClickableMenu(
-    developer_pages.ClickableMenuId.SESSION_SERVICE, 'Session Service',
-    developer_pages.GroupMenuId.INTERNALS)
-developer_pages.addClickableMenu(
-    developer_pages.ClickableMenuId.SIGNIN_INTERNALS, 'Signin',
-    developer_pages.GroupMenuId.INTERNALS)
-developer_pages.addClickableMenu(
-    developer_pages.ClickableMenuId.SYNC_INTERNALS, 'Sync',
-    developer_pages.GroupMenuId.INTERNALS)
-developer_pages.addClickableMenu(
-    developer_pages.ClickableMenuId.TOPICS_INTERNALS, 'Topics',
-    developer_pages.GroupMenuId.INTERNALS)
-developer_pages.addClickableMenu(
-    developer_pages.ClickableMenuId.TRANSLATE_INTERNALS, 'Translate',
-    developer_pages.GroupMenuId.INTERNALS)
-developer_pages.addClickableMenu(
-    developer_pages.ClickableMenuId.USB_INTERNALS, 'USB',
-    developer_pages.GroupMenuId.INTERNALS)
-developer_pages.addClickableMenu(
-    developer_pages.ClickableMenuId.USER_EDUCATION_INTERNALS, 'User Education',
-    developer_pages.GroupMenuId.INTERNALS)
-developer_pages.addClickableMenu(
-    developer_pages.ClickableMenuId.WEB_APP_INTERNALS, 'Web App',
-    developer_pages.GroupMenuId.INTERNALS)
-developer_pages.addClickableMenu(
-    developer_pages.ClickableMenuId.WEBRTC_INTERNALS, 'WebRTC',
-    developer_pages.GroupMenuId.INTERNALS)
+      developer_pages.addGroupMenu(
+          developer_pages.GroupMenuId.INTERNALS, 'Internals',
+          developer_pages.GroupMenuId.BROWSER_LINKS)
+      developer_pages.addClickableMenu(
+          developer_pages.ClickableMenuId.ACCESSIBILITY, 'Accessibility',
+          developer_pages.GroupMenuId.INTERNALS)
+      developer_pages.addClickableMenu(
+          developer_pages.ClickableMenuId.APP_SERVICE_INTERNAL, 'App Service',
+          developer_pages.GroupMenuId.INTERNALS)
+      developer_pages.addClickableMenu(
+          developer_pages.ClickableMenuId.ATTRIBUTION_INTERNALS, 'Attribution',
+          developer_pages.GroupMenuId.INTERNALS)
+      developer_pages.addClickableMenu(
+          developer_pages.ClickableMenuId.AUTOFILL_INTERNALS, 'Autofill',
+          developer_pages.GroupMenuId.INTERNALS)
+      developer_pages.addClickableMenu(
+          developer_pages.ClickableMenuId.BLOB_INTERNALS, 'Blob',
+          developer_pages.GroupMenuId.INTERNALS)
+      developer_pages.addClickableMenu(
+          developer_pages.ClickableMenuId.BLUETOOTH_INTERNALS, 'Bluetooth',
+          developer_pages.GroupMenuId.INTERNALS)
+      developer_pages.addClickableMenu(
+          developer_pages.ClickableMenuId.COMMERCE_INTERNALS, 'Commerce',
+          developer_pages.GroupMenuId.INTERNALS)
+      developer_pages.addClickableMenu(
+          developer_pages.ClickableMenuId.CONNECTORS_INTERNALS, 'Connectors',
+          developer_pages.GroupMenuId.INTERNALS)
+      developer_pages.addClickableMenu(
+          developer_pages.ClickableMenuId.DATA_SHARING_INTERNALS,
+          'Data Sharing', developer_pages.GroupMenuId.INTERNALS)
+      developer_pages.addClickableMenu(
+          developer_pages.ClickableMenuId.DOWNLOAD_INTERNALS, 'Download',
+          developer_pages.GroupMenuId.INTERNALS)
+      developer_pages.addClickableMenu(
+          developer_pages.ClickableMenuId.EXTENSIONS_INTERNALS, 'Extensions',
+          developer_pages.GroupMenuId.INTERNALS)
+      developer_pages.addClickableMenu(
+          developer_pages.ClickableMenuId.FAMILY_LINK_USER_INTERNALS,
+          'Family Link User', developer_pages.GroupMenuId.INTERNALS)
+      developer_pages.addClickableMenu(
+          developer_pages.ClickableMenuId.GCM_INTERNALS, 'GCM',
+          developer_pages.GroupMenuId.INTERNALS)
+      developer_pages.addClickableMenu(
+          developer_pages.ClickableMenuId.GPU, 'GPU',
+          developer_pages.GroupMenuId.INTERNALS)
+      developer_pages.addClickableMenu(
+          developer_pages.ClickableMenuId.INDEXEDDB_INTERNALS, 'IndexedDB',
+          developer_pages.GroupMenuId.INTERNALS)
+      developer_pages.addClickableMenu(
+          developer_pages.ClickableMenuId.TRACES_INTERNALS, 'Local Traces',
+          developer_pages.GroupMenuId.INTERNALS)
+      developer_pages.addClickableMenu(
+          developer_pages.ClickableMenuId.LOCATION_INTERNALS, 'Location',
+          developer_pages.GroupMenuId.INTERNALS)
+      developer_pages.addGroupMenu(
+          developer_pages.GroupMenuId.MEDIA, 'Media',
+          developer_pages.GroupMenuId.INTERNALS)
+      developer_pages.addClickableMenu(
+          developer_pages.ClickableMenuId.MEDIA_INTERNALS, 'View',
+          developer_pages.GroupMenuId.MEDIA)
+      developer_pages.addClickableMenu(
+          developer_pages.ClickableMenuId.MEDIA_ROUTER_INTERNALS, 'Router',
+          developer_pages.GroupMenuId.MEDIA)
+      developer_pages.addClickableMenu(
+          developer_pages.ClickableMenuId.MEMORY_INTERNALS, 'Memory',
+          developer_pages.GroupMenuId.INTERNALS)
+      developer_pages.addClickableMenu(
+          developer_pages.ClickableMenuId.METRICS_INTERNALS, 'Metrics',
+          developer_pages.GroupMenuId.INTERNALS)
+      developer_pages.addClickableMenu(
+          developer_pages.ClickableMenuId.NET_INTERNALS, 'Net',
+          developer_pages.GroupMenuId.INTERNALS)
+      developer_pages.addClickableMenu(
+          developer_pages.ClickableMenuId.NTP_TILES_INTERNALS, 'NTP Tiles',
+          developer_pages.GroupMenuId.INTERNALS)
+      developer_pages.addGroupMenu(
+          developer_pages.GroupMenuId.ON_DEVICE, 'On Device',
+          developer_pages.GroupMenuId.INTERNALS)
+      developer_pages.addClickableMenu(
+          developer_pages.ClickableMenuId.ON_DEVICE_INTERNALS, 'View',
+          developer_pages.GroupMenuId.ON_DEVICE)
+      developer_pages.addClickableMenu(
+          developer_pages.ClickableMenuId.ON_DEVICE_TRANSLATION_INTERNALS,
+          'Translation', developer_pages.GroupMenuId.ON_DEVICE)
+      developer_pages.addClickableMenu(
+          developer_pages.ClickableMenuId.OPTIMIZATION_GUIDE_INTERNALS,
+          'Optimization Guide', developer_pages.GroupMenuId.INTERNALS)
+      developer_pages.addClickableMenu(
+          developer_pages.ClickableMenuId.PASSWORD_MANAGER_INTERNALS,
+          'Password Manager', developer_pages.GroupMenuId.INTERNALS)
+      developer_pages.addClickableMenu(
+          developer_pages.ClickableMenuId.PREFERENCES_INTERNALS, 'Preferences',
+          developer_pages.GroupMenuId.INTERNALS)
+      developer_pages.addClickableMenu(
+          developer_pages.ClickableMenuId.PRIVATE_AGGREGATION_INTERNALS,
+          'Private Aggregation', developer_pages.GroupMenuId.INTERNALS)
+      developer_pages.addClickableMenu(
+          developer_pages.ClickableMenuId.PROCESS_INTERNALS, 'Process',
+          developer_pages.GroupMenuId.INTERNALS)
+      developer_pages.addClickableMenu(
+          developer_pages.ClickableMenuId.QUOTA_INTERNALS, 'Quota',
+          developer_pages.GroupMenuId.INTERNALS)
+      developer_pages.addClickableMenu(
+          developer_pages.ClickableMenuId.SEGMENTATION_INTERNALS,
+          'Segmentation', developer_pages.GroupMenuId.INTERNALS)
+      developer_pages.addClickableMenu(
+          developer_pages.ClickableMenuId.SERVICEWORKER_INTERNALS,
+          'Service Worker', developer_pages.GroupMenuId.INTERNALS)
+      developer_pages.addClickableMenu(
+          developer_pages.ClickableMenuId.SESSION_SERVICE, 'Session Service',
+          developer_pages.GroupMenuId.INTERNALS)
+      developer_pages.addClickableMenu(
+          developer_pages.ClickableMenuId.SIGNIN_INTERNALS, 'Signin',
+          developer_pages.GroupMenuId.INTERNALS)
+      developer_pages.addClickableMenu(
+          developer_pages.ClickableMenuId.SYNC_INTERNALS, 'Sync',
+          developer_pages.GroupMenuId.INTERNALS)
+      developer_pages.addClickableMenu(
+          developer_pages.ClickableMenuId.TOPICS_INTERNALS, 'Topics',
+          developer_pages.GroupMenuId.INTERNALS)
+      developer_pages.addClickableMenu(
+          developer_pages.ClickableMenuId.TRANSLATE_INTERNALS, 'Translate',
+          developer_pages.GroupMenuId.INTERNALS)
+      developer_pages.addClickableMenu(
+          developer_pages.ClickableMenuId.USB_INTERNALS, 'USB',
+          developer_pages.GroupMenuId.INTERNALS)
+      developer_pages.addClickableMenu(
+          developer_pages.ClickableMenuId.USER_EDUCATION_INTERNALS,
+          'User Education', developer_pages.GroupMenuId.INTERNALS)
+      developer_pages.addClickableMenu(
+          developer_pages.ClickableMenuId.WEB_APP_INTERNALS, 'Web App',
+          developer_pages.GroupMenuId.INTERNALS)
+      developer_pages.addClickableMenu(
+          developer_pages.ClickableMenuId.WEBRTC_INTERNALS, 'WebRTC',
+          developer_pages.GroupMenuId.INTERNALS)
 
 
-developer_pages.addGroupMenu(
-    developer_pages.GroupMenuId.REFERENCE, 'Reference',
-    developer_pages.GroupMenuId.BROWSER_LINKS)
-developer_pages.addClickableMenu(
-    developer_pages.ClickableMenuId.INTERSTITIALS, 'Interstitials',
-    developer_pages.GroupMenuId.REFERENCE)
-developer_pages.addClickableMenu(
-    developer_pages.ClickableMenuId.NETWORK_ERRORS, 'Network Errors',
-    developer_pages.GroupMenuId.REFERENCE)
-developer_pages.addClickableMenu(
-    developer_pages.ClickableMenuId.WEBUI_GALLERY, 'WebUI Gallery',
-    developer_pages.GroupMenuId.REFERENCE)
+      developer_pages.addGroupMenu(
+          developer_pages.GroupMenuId.REFERENCE, 'Reference',
+          developer_pages.GroupMenuId.BROWSER_LINKS)
+      developer_pages.addClickableMenu(
+          developer_pages.ClickableMenuId.INTERSTITIALS, 'Interstitials',
+          developer_pages.GroupMenuId.REFERENCE)
+      developer_pages.addClickableMenu(
+          developer_pages.ClickableMenuId.NETWORK_ERRORS, 'Network Errors',
+          developer_pages.GroupMenuId.REFERENCE)
+      developer_pages.addClickableMenu(
+          developer_pages.ClickableMenuId.WEBUI_GALLERY, 'WebUI Gallery',
+          developer_pages.GroupMenuId.REFERENCE)
 
-developer_pages.addGroupMenu(
-    developer_pages.GroupMenuId.SETTINGS, 'Settings',
-    developer_pages.GroupMenuId.BROWSER_LINKS)
-developer_pages.addClickableMenu(
-    developer_pages.ClickableMenuId.MANAGEMENT, 'Management',
-    developer_pages.GroupMenuId.SETTINGS)
-developer_pages.addClickableMenu(
-    developer_pages.ClickableMenuId.PROFILES, 'Profiles',
-    developer_pages.GroupMenuId.SETTINGS)
-developer_pages.addClickableMenu(
-    developer_pages.ClickableMenuId.LINUX_PROXY_CONFIG, 'Proxy Configuration',
-    developer_pages.GroupMenuId.SETTINGS)
+      developer_pages.addGroupMenu(
+          developer_pages.GroupMenuId.SETTINGS, 'Settings',
+          developer_pages.GroupMenuId.BROWSER_LINKS)
+      developer_pages.addClickableMenu(
+          developer_pages.ClickableMenuId.MANAGEMENT, 'Management',
+          developer_pages.GroupMenuId.SETTINGS)
+      developer_pages.addClickableMenu(
+          developer_pages.ClickableMenuId.PROFILES, 'Profiles',
+          developer_pages.GroupMenuId.SETTINGS)
+      developer_pages.addClickableMenu(
+          developer_pages.ClickableMenuId.LINUX_PROXY_CONFIG,
+          'Proxy Configuration', developer_pages.GroupMenuId.SETTINGS)
 
-developer_pages.addSeparator(developer_pages.GroupMenuId.BROWSER_LINKS);
+      developer_pages.addSeparator(developer_pages.GroupMenuId.BROWSER_LINKS);
 
-developer_pages.addClickableMenu(
-    developer_pages.ClickableMenuId.HELP, 'About',
-    developer_pages.GroupMenuId.BROWSER_LINKS)
-developer_pages.addClickableMenu(
-    developer_pages.ClickableMenuId.CREDITS, 'Credits',
-    developer_pages.GroupMenuId.BROWSER_LINKS)
-developer_pages.addClickableMenu(
-    developer_pages.ClickableMenuId.TERMS, 'Terms',
-    developer_pages.GroupMenuId.BROWSER_LINKS)
-developer_pages.addClickableMenu(
-    developer_pages.ClickableMenuId.VERSION, 'Version',
-    developer_pages.GroupMenuId.BROWSER_LINKS)
+      developer_pages.addClickableMenu(
+          developer_pages.ClickableMenuId.HELP, 'ℹ️ About',
+          developer_pages.GroupMenuId.BROWSER_LINKS)
+      developer_pages.addClickableMenu(
+          developer_pages.ClickableMenuId.CREDITS, '©️ Credits',
+          developer_pages.GroupMenuId.BROWSER_LINKS)
+      developer_pages.addClickableMenu(
+          developer_pages.ClickableMenuId.TERMS, '📃 Terms',
+          developer_pages.GroupMenuId.BROWSER_LINKS)
+      developer_pages.addClickableMenu(
+          developer_pages.ClickableMenuId.VERSION, '🏷️ Version',
+          developer_pages.GroupMenuId.BROWSER_LINKS)
 
-developer_pages.addSeparator(developer_pages.GroupMenuId.BROWSER_LINKS);
+      developer_pages.addSeparator(developer_pages.GroupMenuId.BROWSER_LINKS);
 
-developer_pages.addClickableMenu(
-    developer_pages.ClickableMenuId.CHROME_URLS, 'All pages',
-    developer_pages.GroupMenuId.BROWSER_LINKS)
-
+      developer_pages.addClickableMenu(
+          developer_pages.ClickableMenuId.CHROME_URLS, '🔗 All pages',
+          developer_pages.GroupMenuId.BROWSER_LINKS)
+    });
 
 chrome.contextMenus.onClicked.addListener((info, _tab?) => {
   const menuItemId = info.menuItemId as string;
