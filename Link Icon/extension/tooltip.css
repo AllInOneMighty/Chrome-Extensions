@@ -7,10 +7,11 @@
   border-radius: 3px;
   border-width: 1px;
   box-shadow: 0 0 5px #aaa;
+  box-sizing: content-box;
   color: #eee;
   /* By default, the tooltip is invisible. */
   display: none;
-  font-family: sans-serif;
+  height: 16px;
   justify-items: left;
   padding: 5px 5px;
   position: fixed;
@@ -20,6 +21,7 @@
 #e01n2KonBeR9ayn1:after {
   background: #333;
   border-width: 1px !important;
+  box-sizing: content-box;
   content: "";
   display: block;
   height: 19px;
@@ -31,8 +33,10 @@
 
 #e01n2KonBeR9ayn1.above:after {
   border-bottom: 3px solid gold;
+  border-left: none;
   border-radius: 2px;
   border-right: 3px solid gold;
+  border-top: none;
   bottom: -10px;
   box-shadow:
     2.5px 2.5px 5px -3px gold;
@@ -40,8 +44,10 @@
 }
 
 #e01n2KonBeR9ayn1.below:after {
+  border-bottom: none;
   border-left: 3px solid gold;
   border-radius: 2px;
+  border-right: none;
   border-top: 3px solid gold;
   box-shadow:
     -2.5px -3.5px 5px -3px gold;
@@ -50,6 +56,8 @@
 }
 
 #e01n2KonBeR9ayn1.left:after {
+  border-bottom: none;
+  border-left: none;
   border-right: 3px solid gold;
   border-radius: 3px;
   border-top: 3px solid gold;
