@@ -15,7 +15,7 @@
   justify-items: left;
   padding: 5px 5px;
   position: fixed;
-  z-index: 999;
+  z-index: 2147483647;
 }
 
 #e01n2KonBeR9ayn1:after {
