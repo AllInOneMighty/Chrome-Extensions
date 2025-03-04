@@ -1,0 +1,28 @@
+{
+  "manifest_version": 3,
+  "name": "Row Highlighter for Gmail™",
+  "version": "1.5.0",
+  "description": "Highlights Gmail rows on mouse over with nice and shiny colors.",
+  "icons": {
+    "16": "images/extension/16.png",
+    "48": "images/extension/48.png",
+    "128": "images/extension/128.png"
+  },
+  "author": "All-in-one Mighty",
+  "content_scripts": [
+    {
+      "matches": [
+        "http://mail.google.com/*",
+        "https://mail.google.com/*",
+        "http://contacts.google.com/*",
+        "https://contacts.google.com/*"
+      ],
+      "all_frames": false,
+      "js": [
+        "engine.js"
+      ],
+      "run_at": "document_end"
+    }
+  ],
+  "options_page": "options.html"
+}
