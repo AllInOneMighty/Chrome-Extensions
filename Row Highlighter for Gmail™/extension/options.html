@@ -2,24 +2,16 @@
   <head>
     <title>Row Highlighter for Gmail™ - Options</title>
     <link rel="stylesheet" type="text/css" href="options.css"/>
-    <script type="text/javascript" src="jquery/jquery-3.2.1.min.js"></script>
-    <script type="text/javascript" src="jscolor/jscolor-2.0.4.min.js"></script>
-    <script type="text/javascript" src="localStorage.js"></script>
+    <script type="text/javascript" src="common.js"></script>
     <script type="text/javascript" src="options.js"></script>
   </head>
   <body>
-    <div id="header"><h1>Row Highlighter for Gmail™ and Inbox™</h1></div>
-    
+    <div id="header"><h1>Row Highlighter for Gmail™</h1></div>
+
     <div id="contents">
       <div class="section">
         <div class="header">
           <span>Options</span>
-        </div>
-        <div>
-          <p>
-            If you wish to reset all colors at once, click here:
-            <input type="button" id="reset-all" value="Reset" />
-          </p>
         </div>
         <div>
           <h2>Gmail™</h2>
@@ -27,57 +19,24 @@
             <dt>Unread color</dt>
             <dd>
               <p>
-                <input type="text" id="email-unread-color" class="jscolor" />
+                <input type="color" id="email-unread-color" />
                 <a id="email-unread-color-reset" href="#">Reset</a>
               </p>
             </dd>
             <dt>Read color</dt>
             <dd>
               <p>
-                <input type="text"  id="email-read-color" class="jscolor" />
+                <input type="color"  id="email-read-color" />
                 <a id="email-read-color-reset" href="#">Reset</a>
-              </p>
-            </dd>
-          </dl>
-        </div>
-        <div>
-          <h2>Inbox™</h2>
-          <dl>
-            <dt>Hover color (emails)</dt>
-            <dd>
-              <p>
-                <input type="text"  id="inbox-email-color" class="jscolor" />
-                <a id="inbox-email-color-reset" href="#">Reset</a>
-              </p>
-            </dd>
-            <dt>Hover color (bundles)</dt>
-            <dd>
-              <p>
-                <input type="text"  id="inbox-bundle-color" class="jscolor" />
-                <a id="inbox-bundle-color-reset" href="#">Reset</a>
-              </p>
-            </dd>
-          </dl>
-        </div>
-        <div>
-          <h2>Contacts</h2>
-          <dl>
-            <dt>Hover color</dt>
-            <dd>
-              <p>
-                <input type="text"  id="contacts-hover-color" class="jscolor" />
-                <a id="contacts-hover-color-reset" href="#">Reset</a>
               </p>
             </dd>
           </dl>
         </div>
       </div>
     </div>
-    
+
     <div id="footer">
       <div id="actions">
-        <span id="confirm">Options have been saved!</span>
-        <button id="bu-save-options">Save</button>
         <button id="bu-close">Close</button><br/>
         Note: pages must be reloaded in order for changes to take effect.
       </div>
