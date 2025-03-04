@@ -50,7 +50,7 @@ namespace options {
 }  // namespace options
 
 document.addEventListener('DOMContentLoaded', (ev: Event) => {
-  document.querySelector('#bu-close')
+  document.getElementById('close-button')
       ?.addEventListener('click', options.closeEventListener);
 
   chrome.storage.sync.get().then((value) => {

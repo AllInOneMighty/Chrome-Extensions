@@ -46,7 +46,7 @@ var options;
     };
 })(options || (options = {}));
 document.addEventListener('DOMContentLoaded', (ev) => {
-    document.querySelector('#bu-close')
+    document.getElementById('close-button')
         ?.addEventListener('click', options.closeEventListener);
     chrome.storage.sync.get().then((value) => {
         options.loadUserSettings(value);

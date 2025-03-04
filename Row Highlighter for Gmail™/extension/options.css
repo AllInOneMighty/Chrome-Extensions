@@ -1,98 +1,87 @@
 body {
-  font-family:Helvetica,Arial,sans-serif,serif;
-  font-size:87%;
-  margin:10px;
-  min-width: 47em;
-}
-
-.bold {
-  font-weight:bold;
-}
-.italic {
-  font-style:italic;
+  background-color: #000;
+  background-image: linear-gradient(to bottom right, #262625, #000);
+  color: #eee;
+  font-family: Helvetica, Arial, sans-serif, serif;
+  margin-left: auto;
+  margin-right: auto;
+  width: 600px;
 }
 
 a {
-  color:blue;
-  font-size:100%;
+  color: rgb(229, 223, 232);
+  font-size: 100%;
 }
 
-h1 {
-  font-size:150%;
-  font-weight:bold;
-  padding:0;
-  margin:0;
+h1 img {
+  vertical-align: middle;
 }
 
-h2 {
-  font-size: 130%;
+h1 span {
+  margin-left: 10px;
+  vertical-align: middle;
 }
 
-ul.no_style_type {
-  list-style-type:none;
-  padding-left:0;
-}
-dl dt {
-  font-weight:bold;
+#contents {
+  font-size: 14px;
 }
 
-div#header {
-  margin-bottom:1.05em;
-  overflow:hidden;
-  padding-bottom:1.5em;
-  padding-left:0;
-  padding-top:1.5em;
-  position:relative;
-}
-div#header h1 {
-  background:url("images/extension/48.png") 0px 35px no-repeat;
-  display:inline;
-  margin:0;
-  padding-bottom:43px;
-  padding-left:60px;
-  padding-top:50px;
+#contents #note {
+  color: hsl(0 170% 70% / 1);
+  font-style: italic;
 }
 
-div.section {
-  background:#f4f6fc;
-  border-bottom: 1px solid #edeff5;
-  border-top:1px solid #b5c7de;
-  margin-bottom:20px;
-}
-div.section div.header {
-  background:#ebeff9;
-  font-size:95%;
-  font-weight:bold;
-  padding-bottom:2px;
-  padding-left:0px;
-  padding-top:3px;
-  width:100%;
-}
-div.section div.header span {
-  padding-left:5px;
-}
-div.section div {
-  font-size:85%;
-  padding-left:10px;
-  padding-top:0.8em;
-  width:100%;
+#contents dl dt {
+  font-weight: bold;
 }
 
-div#footer {
-  font-size:90%;
-  text-align:right;
+#contents dl dd {
+  margin-left: 0;
 }
-div#footer span#confirm {
-  background:#fff3aa none repeat scroll 0 0;
-  border-radius:5px;
-  font-size:95%;
-  display:none;
-  padding:7px 10px;
-  margin-right:30px;
-  -webkit-border-radius:10px;
+
+#contents dl dd p {
+  background-color: #3e2d2d;
+  border-radius: 6px;
+  padding: 10px 20px;
 }
-div#footer div#copyright {
-  border-top:1px solid #ccc;
-  margin-top:20px;
-  text-align:right;
+
+#contents dl dd p input {
+  vertical-align: middle;
+}
+
+#contents dl dd p a {
+  margin-left: 5px;
+  vertical-align: middle;
+}
+
+#footer {
+  font-size: 14px;
+}
+
+#footer #actions {
+  text-align: center;
+}
+
+#footer #actions button {
+  padding: 6px 12px;
+  text-transform: uppercase;
+}
+
+#footer #copyright {
+  border-top: 1px solid #ccc;
+  margin-top: 20px;
+  text-align: right;
+}
+
+#footer #copyright #author {
+  margin-bottom: 0;
+}
+
+#footer #copyright #author-text {
+  font-weight: bold;
+}
+
+#footer #copyright #vote {
+  margin-bottom: 60px;
+  margin-top: 4px;
 }

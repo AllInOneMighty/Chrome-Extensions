@@ -1,53 +1,50 @@
 <html>
-  <head>
-    <title>Row Highlighter for Gmail™ - Options</title>
-    <link rel="stylesheet" type="text/css" href="options.css"/>
-    <script type="text/javascript" src="common.js"></script>
-    <script type="text/javascript" src="options.js"></script>
-  </head>
-  <body>
-    <div id="header"><h1>Row Highlighter for Gmail™</h1></div>
 
-    <div id="contents">
-      <div class="section">
-        <div class="header">
-          <span>Options</span>
-        </div>
-        <div>
-          <h2>Gmail™</h2>
-          <dl>
-            <dt>Unread color</dt>
-            <dd>
-              <p>
-                <input type="color" id="email-unread-color" />
-                <a id="email-unread-color-reset" href="#">Reset</a>
-              </p>
-            </dd>
-            <dt>Read color</dt>
-            <dd>
-              <p>
-                <input type="color"  id="email-read-color" />
-                <a id="email-read-color-reset" href="#">Reset</a>
-              </p>
-            </dd>
-          </dl>
-        </div>
-      </div>
-    </div>
+<head>
+  <title>Row Highlighter for Gmail™ - Options</title>
+  <link rel="stylesheet" type="text/css" href="options.css" />
+  <script type="text/javascript" src="common.js"></script>
+  <script type="text/javascript" src="options.js"></script>
+</head>
 
-    <div id="footer">
-      <div id="actions">
-        <button id="bu-close">Close</button><br/>
-        Note: pages must be reloaded in order for changes to take effect.
-      </div>
-      <div id="copyright">
-        <p class="bold">by pb_ee1</p>
+<body>
+  <h1><img src="images/extension/48.png" alt="Row Highlighter Logo" /><span>Row Highlighter for Gmail™</span></h1>
+
+  <div id="contents">
+    <h2>Options</h2>
+
+    <p id="note">Gmail™ must be reloaded in order for changes to take effect.</p>
+
+    <dl>
+      <dt>Unread color</dt>
+      <dd>
         <p>
-          Don't hesitate to <a href="https://chrome.google.com/webstore/detail/ijfolchflbmnfopmpmodilcelmdakbfl" target="_blank">vote
-          for this extension</a> or <a href="https://chrome.google.com/webstore/detail/ijfolchflbmnfopmpmodilcelmdakbfl/reviews" target="_blank">post
-          your comments</a> if you appreciate it!
+          <input type="color" id="email-unread-color" />
+          <a id="email-unread-color-reset" href="#">Reset</a>
         </p>
-      </div>
+      </dd>
+      <dt>Read color</dt>
+      <dd>
+        <p>
+          <input type="color" id="email-read-color" />
+          <a id="email-read-color-reset" href="#">Reset</a>
+        </p>
+      </dd>
+    </dl>
+  </div>
+
+  <div id="footer">
+    <div id="actions">
+      <button id="close-button">Close</button><br />
     </div>
-  </body>
+    <div id="copyright">
+      <p id="author">by <span id="author-text">All-in-one Mighty</span></p>
+      <p id="vote">
+        Please <a href="https://chrome.google.com/webstore/detail/ijfolchflbmnfopmpmodilcelmdakbfl" target="_blank">vote
+          for this extension</a> if you appreciate it!
+      </p>
+    </div>
+  </div>
+</body>
+
 </html>
