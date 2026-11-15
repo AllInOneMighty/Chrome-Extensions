@@ -43,6 +43,8 @@ namespace engine {
   export function observe() {
     // Listen to anchor element changes and update tooltip state accordingly.
     const observer = new MutationObserver(function(mutations, observer) {
+      // Prevent deadlock if showing the tooltip re-triggers the observer.
+      observer.disconnect();
       mutations.forEach((mutation, _index, _array) => {
         // Only look at anchors
         if (!(mutation.target instanceof HTMLAnchorElement)) {
@@ -64,6 +66,9 @@ namespace engine {
           tooltip.showTooltip(anchorElement, maybeFillTooltipContents);
         }
       });
+      // Re-observe the document to continue listening for anchor changes.
+      observer.observe(
+        document, {attributes: true, childList: false, subtree: true});
     });
     observer.observe(
         document, {attributes: true, childList: false, subtree: true});

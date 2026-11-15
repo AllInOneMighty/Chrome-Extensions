@@ -29,6 +29,7 @@ var engine;
     engine.loadUserSettings = loadUserSettings;
     function observe() {
         const observer = new MutationObserver(function (mutations, observer) {
+            observer.disconnect();
             mutations.forEach((mutation, _index, _array) => {
                 if (!(mutation.target instanceof HTMLAnchorElement)) {
                     return;
@@ -43,6 +44,7 @@ var engine;
                     tooltip.showTooltip(anchorElement, maybeFillTooltipContents);
                 }
             });
+            observer.observe(document, { attributes: true, childList: false, subtree: true });
         });
         observer.observe(document, { attributes: true, childList: false, subtree: true });
     }
