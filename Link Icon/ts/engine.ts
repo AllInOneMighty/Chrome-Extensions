@@ -44,34 +44,38 @@ namespace engine {
     // Listen to anchor element changes and update tooltip state accordingly.
     const observer = new MutationObserver(function(mutations, observer) {
       // Prevent deadlock if showing the tooltip re-triggers the observer.
-      observer.disconnect();
       mutations.forEach((mutation, _index, _array) => {
-        // Only look at anchors
+        // Only look at anchors. Do this early as it's quick to check.
         if (!(mutation.target instanceof HTMLAnchorElement)) {
           return;
         }
 
+        const anchorElement = anchorFromPoint();
         // If mouse is not over an anchor (it has disappeared), hide the
         // tooltip.
-        const anchorElement = anchorFromPoint();
         if (anchorElement == null) {
           tooltip.hideTooltip();
           return;
         }
+        // If mouse is over an anchor, but not the one that changed. Do nothing.
+        if (anchorElement != mutation.target) {
+          return;
+        }
 
-        // If the anchor's attributes has changed (except 'data-' which are used
-        // for rendering), force show the tooltip to potentially update it.
-        if (mutation.type == 'attributes' &&
-            !mutation.attributeName?.startsWith('data-')) {
+        // If the anchor's filtered attributes have changed, force show the
+        // tooltip to potentially update it.
+        if (mutation.type == 'attributes') {
           tooltip.showTooltip(anchorElement, maybeFillTooltipContents);
         }
       });
-      // Re-observe the document to continue listening for anchor changes.
-      observer.observe(
-        document, {attributes: true, childList: false, subtree: true});
     });
-    observer.observe(
-        document, {attributes: true, childList: false, subtree: true});
+    observer.observe(document, {
+      attributes: true,
+      // Only those attributes matter for rendering.
+      attributeFilter: ['href', 'target', 'onclick'],
+      childList: false,
+      subtree: true
+    });
   }
 
   /**

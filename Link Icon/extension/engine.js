@@ -29,7 +29,6 @@ var engine;
     engine.loadUserSettings = loadUserSettings;
     function observe() {
         const observer = new MutationObserver(function (mutations, observer) {
-            observer.disconnect();
             mutations.forEach((mutation, _index, _array) => {
                 if (!(mutation.target instanceof HTMLAnchorElement)) {
                     return;
@@ -39,14 +38,20 @@ var engine;
                     tooltip.hideTooltip();
                     return;
                 }
-                if (mutation.type == 'attributes' &&
-                    !mutation.attributeName?.startsWith('data-')) {
+                if (anchorElement != mutation.target) {
+                    return;
+                }
+                if (mutation.type == 'attributes') {
                     tooltip.showTooltip(anchorElement, maybeFillTooltipContents);
                 }
             });
-            observer.observe(document, { attributes: true, childList: false, subtree: true });
         });
-        observer.observe(document, { attributes: true, childList: false, subtree: true });
+        observer.observe(document, {
+            attributes: true,
+            attributeFilter: ['href', 'target', 'onclick'],
+            childList: false,
+            subtree: true
+        });
     }
     engine.observe = observe;
     function maybeFillTooltipContents(anchor, tooltipElement) {
