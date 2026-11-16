@@ -7,16 +7,50 @@ namespace tooltip {
   const TOOLTIP_BELOW_CLASS = 'below';
   const TOOLTIP_ABOVE_CLASS = 'above';
 
+  // Track the last icons shown in the tooltip to avoid re-rendering it if the
+  // same icons are to be shown again.
+  let lastIconsShown: Set<link_icon.IconId> = new Set<link_icon.IconId>();
+
+  /**
+   * Fills the given tooltip with the given icons to show.
+   */
+  function fillTooltipContents(
+      iconsToShow: Set<link_icon.IconId>, linkIcon: link_icon.LinkIcon,
+      tooltipElement: HTMLElement) {
+    // At least one icon to display.
+    // Iterate over ordered list of icon and for each one we can find in the
+    // icons to show, add it to the tooltip.
+    for (const icon of linkIcon.iconsByPriority) {
+      if (iconsToShow.has(icon.id)) {
+        const span = document.createElement('span');
+        span.style.background =
+            'url("data:image/png;base64,' + icon.imageBase64 + '")';
+        span.style.display = 'inline-block';
+        span.style.height = '16px';
+        span.style.width = '16px';
+        tooltipElement.appendChild(span);
+      }
+    }
+  }
+
   /**
    * Immediately shows the tooltip on the given element using the filling method
    * to fill its contents.
+   *
+   * Args:
+   *  anchorElement: The anchor element to show the tooltip on.
+   *  getIconsToShowMethod: The method to get the icons to show for the given
+   *    anchor element.
+   *  linkIcon: The link icon instance.
+   *  forceUpdate: Whether to force updating the tooltip contents. Useful if the
+   *    tooltip's class or style has changed, which may affect the tooltip's
+   *    position and size.
    */
   export function showTooltip(
       anchorElement: HTMLAnchorElement,
-      fillTooltipMethod: (
-          anchorElement: HTMLAnchorElement,
-          tooltipElement: HTMLElement,
-          ) => boolean) {
+      getIconsToShowMethod:
+          (anchor: HTMLAnchorElement) => Set<link_icon.IconId>,
+      linkIcon: link_icon.LinkIcon, forceUpdate: boolean = false) {
     const tooltipElement =
         document.querySelector('#' + TOOLTIP_ID) as HTMLElement;
     if (tooltipElement == null) {
@@ -24,12 +58,26 @@ namespace tooltip {
       return;
     }
 
-    // Reset tooltip contents first
-    tooltipElement.textContent = '';
-    // Then fill it, and return if there is no content.
-    if (!fillTooltipMethod(anchorElement, tooltipElement)) {
+    const iconsToShow = getIconsToShowMethod(anchorElement);
+
+    if (iconsToShow.size == 0) {
+      // No icons to show, hide the tooltip and return early.
+      // This clears the lastIconsShown set as well.
+      hideTooltip();
       return;
     }
+
+    if (!forceUpdate && iconsToShow.size == lastIconsShown.size &&
+        iconsToShow.isSubsetOf(lastIconsShown)) {
+      // No change in icons to show, return early.
+      return;
+    }
+
+    // Reset tooltip contents first.
+    tooltipElement.textContent = '';
+    fillTooltipContents(iconsToShow, linkIcon, tooltipElement);
+
+    lastIconsShown = iconsToShow;
 
     // Get position of anchor within the viewport.
     const anchorClientRect = anchorElement.getBoundingClientRect();
@@ -87,6 +135,7 @@ namespace tooltip {
       return;
     }
     tooltipElement.style.display = 'none';
+    lastIconsShown.clear();
   }
 
   /**
@@ -96,13 +145,11 @@ namespace tooltip {
    */
   export function addTooltipEventListeners(
       anchorElement: HTMLAnchorElement,
-      fillTooltipMethod: (
-          anchorElement: HTMLAnchorElement,
-          tooltipElement: HTMLElement,
-          ) => boolean,
-  ) {
+      getIconsToShowMethod:
+          (anchor: HTMLAnchorElement) => Set<link_icon.IconId>,
+      linkIcon: link_icon.LinkIcon) {
     anchorElement.addEventListener('mouseenter', (_event: Event) => {
-      showTooltip(anchorElement, fillTooltipMethod);
+      showTooltip(anchorElement, getIconsToShowMethod, linkIcon);
     });
     anchorElement.addEventListener('mouseleave', (_event: Event) => {
       hideTooltip();

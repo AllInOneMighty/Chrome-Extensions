@@ -43,7 +43,6 @@ namespace engine {
   export function observe() {
     // Listen to anchor element changes and update tooltip state accordingly.
     const observer = new MutationObserver(function(mutations, observer) {
-      // Prevent deadlock if showing the tooltip re-triggers the observer.
       mutations.forEach((mutation, _index, _array) => {
         // Only look at anchors. Do this early as it's quick to check.
         if (!(mutation.target instanceof HTMLAnchorElement)) {
@@ -65,25 +64,23 @@ namespace engine {
         // If the anchor's filtered attributes have changed, force show the
         // tooltip to potentially update it.
         if (mutation.type == 'attributes') {
-          tooltip.showTooltip(anchorElement, maybeFillTooltipContents);
+          tooltip.showTooltip(
+              anchorElement, getIconsToShow, linkIcon,
+              /*forceUpdate=*/ mutation.attributeName == 'class' ||
+                  mutation.attributeName == 'style');
         }
       });
     });
     observer.observe(document, {
       attributes: true,
       // Only those attributes matter for rendering.
-      attributeFilter: ['href', 'target', 'onclick'],
+      attributeFilter: ['class', 'onclick', 'href', 'target', 'style'],
       childList: false,
       subtree: true
     });
   }
 
-  /**
-   * Fills the given tooltip with icons related to the given anchor, or returns
-   * `false` if nothing was filled.
-   */
-  function maybeFillTooltipContents(
-      anchor: HTMLAnchorElement, tooltipElement: HTMLElement): boolean {
+  function getIconsToShow(anchor: HTMLAnchorElement): Set<link_icon.IconId> {
     const iconsToShow = new Set<link_icon.IconId>();
 
     // Compute URL extension here to do it only once per URL and not once per
@@ -108,26 +105,7 @@ namespace engine {
       }
     }
 
-    if (iconsToShow.size == 0) {
-      return false;
-    }
-
-    // At least one icon to display.
-    // Iterate over ordered list of icon and for each one we can find in the
-    // icons to show, add it to the tooltip.
-    for (const icon of linkIcon.iconsByPriority) {
-      if (iconsToShow.has(icon.id)) {
-        const span = document.createElement('span');
-        span.style.background =
-            'url("data:image/png;base64,' + icon.imageBase64 + '")';
-        span.style.display = 'inline-block';
-        span.style.height = '16px';
-        span.style.width = '16px';
-        tooltipElement.appendChild(span);
-      }
-    }
-
-    return true;
+    return iconsToShow;
   }
 
   /**
@@ -143,11 +121,7 @@ namespace engine {
       // Save that event listeners have been added to not re-add them every
       // time.
       anchorElement.dataset[tooltip.TOOLTIP_ID] = '1';
-      tooltip.addTooltipEventListeners(
-          anchorElement,
-          (anchorElement: HTMLAnchorElement, tooltipElement: HTMLElement) => {
-            return maybeFillTooltipContents(anchorElement, tooltipElement);
-          });
+      tooltip.addTooltipEventListeners(anchorElement, getIconsToShow, linkIcon);
       return true;
     }
     return false;
@@ -164,7 +138,7 @@ namespace engine {
 
     if (maybeAddTooltipEventListeners(anchorElement)) {
       // Mouse is already over anchor, so force showing the tooltip.
-      tooltip.showTooltip(anchorElement, maybeFillTooltipContents);
+      tooltip.showTooltip(anchorElement, getIconsToShow, linkIcon);
     }
   };
 
@@ -181,7 +155,7 @@ namespace engine {
     maybeAddTooltipEventListeners(anchorElement);
     // Scrolling on an element does not trigger mouseenter, so forcibly show the
     // tooltip every time.
-    tooltip.showTooltip(anchorElement, maybeFillTooltipContents);
+    tooltip.showTooltip(anchorElement, getIconsToShow, linkIcon);
   };
 
   export const wheelEventListener = (_ev: WheelEvent) => {
@@ -200,7 +174,7 @@ namespace engine {
       maybeAddTooltipEventListeners(anchorElement);
       // It is not guaranteed that a mousenter event is fired, so always show
       // the tooltip.
-      tooltip.showTooltip(anchorElement, maybeFillTooltipContents);
+      tooltip.showTooltip(anchorElement, getIconsToShow, linkIcon);
 
       timeoutId = undefined;
     }, 200);

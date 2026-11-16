@@ -6,15 +6,37 @@ var tooltip;
     const TOOLTIP_LEFT_CLASS = 'left';
     const TOOLTIP_BELOW_CLASS = 'below';
     const TOOLTIP_ABOVE_CLASS = 'above';
-    function showTooltip(anchorElement, fillTooltipMethod) {
+    let lastIconsShown = new Set();
+    function fillTooltipContents(iconsToShow, linkIcon, tooltipElement) {
+        for (const icon of linkIcon.iconsByPriority) {
+            if (iconsToShow.has(icon.id)) {
+                const span = document.createElement('span');
+                span.style.background =
+                    'url("data:image/png;base64,' + icon.imageBase64 + '")';
+                span.style.display = 'inline-block';
+                span.style.height = '16px';
+                span.style.width = '16px';
+                tooltipElement.appendChild(span);
+            }
+        }
+    }
+    function showTooltip(anchorElement, getIconsToShowMethod, linkIcon, forceUpdate = false) {
         const tooltipElement = document.querySelector('#' + tooltip.TOOLTIP_ID);
         if (tooltipElement == null) {
             return;
         }
-        tooltipElement.textContent = '';
-        if (!fillTooltipMethod(anchorElement, tooltipElement)) {
+        const iconsToShow = getIconsToShowMethod(anchorElement);
+        if (iconsToShow.size == 0) {
+            hideTooltip();
             return;
         }
+        if (!forceUpdate && iconsToShow.size == lastIconsShown.size &&
+            iconsToShow.isSubsetOf(lastIconsShown)) {
+            return;
+        }
+        tooltipElement.textContent = '';
+        fillTooltipContents(iconsToShow, linkIcon, tooltipElement);
+        lastIconsShown = iconsToShow;
         const anchorClientRect = anchorElement.getBoundingClientRect();
         tooltipElement.style.top = '0';
         tooltipElement.style.left = '0';
@@ -49,11 +71,12 @@ var tooltip;
             return;
         }
         tooltipElement.style.display = 'none';
+        lastIconsShown.clear();
     }
     tooltip.hideTooltip = hideTooltip;
-    function addTooltipEventListeners(anchorElement, fillTooltipMethod) {
+    function addTooltipEventListeners(anchorElement, getIconsToShowMethod, linkIcon) {
         anchorElement.addEventListener('mouseenter', (_event) => {
-            showTooltip(anchorElement, fillTooltipMethod);
+            showTooltip(anchorElement, getIconsToShowMethod, linkIcon);
         });
         anchorElement.addEventListener('mouseleave', (_event) => {
             hideTooltip();

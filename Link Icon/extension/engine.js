@@ -42,19 +42,20 @@ var engine;
                     return;
                 }
                 if (mutation.type == 'attributes') {
-                    tooltip.showTooltip(anchorElement, maybeFillTooltipContents);
+                    tooltip.showTooltip(anchorElement, getIconsToShow, linkIcon, mutation.attributeName == 'class' ||
+                        mutation.attributeName == 'style');
                 }
             });
         });
         observer.observe(document, {
             attributes: true,
-            attributeFilter: ['href', 'target', 'onclick'],
+            attributeFilter: ['class', 'onclick', 'href', 'target', 'style'],
             childList: false,
             subtree: true
         });
     }
     engine.observe = observe;
-    function maybeFillTooltipContents(anchor, tooltipElement) {
+    function getIconsToShow(anchor) {
         const iconsToShow = new Set();
         let url = undefined;
         let urlLastExtension = '';
@@ -74,28 +75,12 @@ var engine;
                 icon.addAndMaybeDeactivate(iconsToShow);
             }
         }
-        if (iconsToShow.size == 0) {
-            return false;
-        }
-        for (const icon of linkIcon.iconsByPriority) {
-            if (iconsToShow.has(icon.id)) {
-                const span = document.createElement('span');
-                span.style.background =
-                    'url("data:image/png;base64,' + icon.imageBase64 + '")';
-                span.style.display = 'inline-block';
-                span.style.height = '16px';
-                span.style.width = '16px';
-                tooltipElement.appendChild(span);
-            }
-        }
-        return true;
+        return iconsToShow;
     }
     function maybeAddTooltipEventListeners(anchorElement) {
         if (!(tooltip.TOOLTIP_ID in anchorElement.dataset)) {
             anchorElement.dataset[tooltip.TOOLTIP_ID] = '1';
-            tooltip.addTooltipEventListeners(anchorElement, (anchorElement, tooltipElement) => {
-                return maybeFillTooltipContents(anchorElement, tooltipElement);
-            });
+            tooltip.addTooltipEventListeners(anchorElement, getIconsToShow, linkIcon);
             return true;
         }
         return false;
@@ -108,7 +93,7 @@ var engine;
             return;
         }
         if (maybeAddTooltipEventListeners(anchorElement)) {
-            tooltip.showTooltip(anchorElement, maybeFillTooltipContents);
+            tooltip.showTooltip(anchorElement, getIconsToShow, linkIcon);
         }
     };
     engine.scrollEventListener = (_ev) => {
@@ -120,7 +105,7 @@ var engine;
             return;
         }
         maybeAddTooltipEventListeners(anchorElement);
-        tooltip.showTooltip(anchorElement, maybeFillTooltipContents);
+        tooltip.showTooltip(anchorElement, getIconsToShow, linkIcon);
     };
     engine.wheelEventListener = (_ev) => {
         tooltip.hideTooltip();
@@ -133,7 +118,7 @@ var engine;
                 return;
             }
             maybeAddTooltipEventListeners(anchorElement);
-            tooltip.showTooltip(anchorElement, maybeFillTooltipContents);
+            tooltip.showTooltip(anchorElement, getIconsToShow, linkIcon);
             timeoutId = undefined;
         }, 200);
     };
