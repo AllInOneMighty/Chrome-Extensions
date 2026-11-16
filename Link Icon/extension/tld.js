@@ -1,7 +1,7 @@
 "use strict";
 var tld;
 (function (tld) {
-    const TLDS = [
+    const TLDS = new Set([
         'aaa',
         'aarp',
         'abb',
@@ -1438,12 +1438,12 @@ var tld;
         'zone',
         'zuerich',
         'zw'
-    ];
+    ]);
     function getRootDomainName(host) {
         const invertedHost = host.split('.').reverse();
         for (let i = 0; i < invertedHost.length; i++) {
             const part = invertedHost[i];
-            if (TLDS.indexOf(part) < 0) {
+            if (!TLDS.has(part)) {
                 if (part == 'www') {
                     return invertedHost[i - 1];
                 }

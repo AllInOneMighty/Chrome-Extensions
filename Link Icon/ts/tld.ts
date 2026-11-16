@@ -1,6 +1,6 @@
 namespace tld {
   // Taken from: http://data.iana.org/TLD/tlds-alpha-by-domain.txt
-  const TLDS = [
+  const TLDS = new Set<string>([
     'aaa',
     'aarp',
     'abb',
@@ -1437,7 +1437,7 @@ namespace tld {
     'zone',
     'zuerich',
     'zw'
-  ];
+  ]);
 
   function getRootDomainName(host: string) {
     // Split host on '.' and invert it to start from the end
@@ -1446,7 +1446,7 @@ namespace tld {
     // Now try to find the first part does not match a TLD
     for (let i = 0; i < invertedHost.length; i++) {
       const part = invertedHost[i];
-      if (TLDS.indexOf(part) < 0) {
+      if (!TLDS.has(part)) {
         // Not found in list of TLDs
         // If this is www, then previous part was the root
         // domain name (except if host is malformed but
